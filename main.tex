@@ -1,29 +1,37 @@
 %! Licence = CC BY-NC-SA 4.0
 
-%! Author = mariuszindel
-%! Date = 24. Jan 2021
-%! Project = latex-test-template
-
+%! Author = gianfluetsch
+%! Date = 07.09.2021
+%! Project = Latex-documentation-template
 
 %import template
-\input{./style/template.tex}
+\input{style/template.tex}
 
 
-\newcommand{\TITLE}{Cheat Sheet Cyber Defense}
-\newcommand{\DELIVERYDATE}{\today}
+\newcommand{\SUBJECT}{CyDef}
+\newcommand{\TITLE}{CyDef Summary}
+\newcommand{\PROF}{Ivan Bütler}
+
+\newcommand{\VERSION}{30.12.2021}
 
 \begin{document}
 
-	\begin{multicols*}{3}
-		\setlength{\columnseprule}{0.4pt}
-		\footnotesize
+%import cover and tableofcontents
+    \input{style/cover.tex}
 
-%import tableofcontents
-% \input{./tableofcontents.tex}
+%import content
+    \input{content/01_cyber-defense.tex}
+    \input{content/02_siem-soar-edr.tex}
+    \input{content/03_active_directory.tex}
+    \input{content/04_mimikatz-sysmon.tex}
+    \input{content/05_spf-dkim-dmarc.tex}
+    \input{content/06_forensic-readiness.tex}
+    \input{content/07_velociraptor.tex}
+    \input{content/08_yara.tex}
+    \input{content/09_red-teaming.tex}
+    \input{content/10_misp.tex}
 
-		\input{content/01-threat_actors.tex}
-
-
-	\end{multicols*}
+%import appendix
+    % \input{style/appendix.tex}
 
 \end{document}
