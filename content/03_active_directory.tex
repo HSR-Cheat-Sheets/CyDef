@@ -1,131 +1,207 @@
 %! Licence = CC BY-NC-SA 4.0
 
-%! Author = gianfluetsch
+%! Author = gianfluetsch, mariuszindel
 %! Date = 30. Dez 2021
 %! Project = cydef_summary
 
-\section{Active Directory}
+
+\section{Active Directory}\label{sec:active-directory}
+
+\subsection{Was ist eine AD?}\label{subsec:was-ist-eine-ad}
+
+\subsubsection{Vorteile}
 \begin{itemize}
-    \item Active Directory (AD) is a directory service (database) developed by Microsoft
-    \item Used for centralized management of computers, servers, users, …
-    \item Performs authentication and authorization of users and computers
+    \item Single-Sign On (Kerberos)
+    \item Mit Domänenkennwort an jedem Computer anmelden
+    \item Zentrales Management für praktisch alles
+\end{itemize}
+
+\subsubsection{Beschreibung}
+\begin{itemize}
+    \item Active Directory (AD) ist ein Verzeichnisdienst (Datenbank), von Microsoft entwickelt
+    \item Wird für die zentralisierte Verwaltung von Computern, Servern, Benutzern, etc. verwendet.
+    \item Führt die Authentifizierung und Autorisierung von Benutzern und Computern durch
     \begin{itemize}
-        \item It verifies the credentials of the users and defines their access rights
-        \item It is based on LDAP, NTLM, Kerberos (Microsoft's version), DNS and other protocols
+        \item Prüft die Anmeldeinformationen der Benutzer und legt ihre Zugriffsrechte fest
+        \item Basiert auf LDAP, NTLM, Kerberos (Microsofts Version), DNS und anderen Protokollen
     \end{itemize}
-    \item Structured in objects
+    \item Strukturiert in Objekten
     \begin{itemize}
-        \item Resources (e.g. printers)
-        \item Security Principals (e.g. users, groups, computer accounts)
+        \item Ressourcen (z. B. Drucker)
+        \item Sicherheitsprinzipien (z. B. Benutzer, Gruppen, Computerkonten)
     \end{itemize}
-    \item Organizational Units
+    \item Organisatorische Einheiten
     \begin{itemize}
-        \item Objects within a domain can be grouped into OUs
-        \item OUs can provide a hierarchy to a domain. This simplifies administration
+        \item Objekte innerhalb einer Domäne können in OUs gruppiert werden
+        \item OUs können eine Hierarchie für eine Domäne bilden. Dies vereinfacht die Verwaltung.
     \end{itemize}
-    \item Logical divisions: forest, tree \& domain
-    \item Active Directory stores
+    \item Logische Unterteilungen: Forest, tree \& domain
+    \item Active Directory speichert
     \begin{itemize}
-        \item password hash of every user
+        \item password hash of every user $\rightarrow$ \textbf{Target for attackers!!!}
         \item computer hash of every computer
-        \color{red}
-        \item \textbf{Target for attackers!!!}
     \end{itemize}
 \end{itemize}
 
-\subsection{Active Directory Threats}
+\subsubsection{Terminologie}
 \begin{itemize}
-    \item The AD is a central target for attackers, because if compromised, everything is compromised
-    \item AD infrastructure can be very complex and therefore hard to configure and maintain securely
-    \item \textbf{Common misconfigurations and pitfalls} that can be abused by attackers:
+    \item Container
     \begin{itemize}
-        \item No segregation of \textbf{privileged access}, e.g. highly privileged admins interactively log on clients/servers
-        \item Service (or User) Accounts with \textbf{weak passwords and SPN (Service Principal Name) set}, even worse if ownership is lost
-        \item \textbf{Weak passwords} in general
-        \item \textbf{Same local admin password} on all computers
-        \item \textbf{Password re-use} in general
-        \item \textbf{Credentials on shares} (e.g. Logon Scripts on SYSVOL) where Everyone has read/write access
-        \item \textbf{Lack of least-privilege} principle in general
+        \item Übergeordnetes Objekt für bestimmte Arten von AD-Objekten
+        \item Forests, Domains, OUs, Sites, subnets
+    \end{itemize}
+    \item Domain
+    \begin{itemize}
+        \item Objekte werden immer in einer Domäne gesammelt
+        \item Logische Gruppe von Netzwerkobjekten (Computer, Benutzer, Geräte)
+        \item Identifiziert durch einen DNS-Namen (Namespace)
+    \end{itemize}
+    \item Tree
+    \begin{itemize}
+        \item Sammlung von einer oder mehreren Domänen oder Trees
+        \item Verknüpft in einer transitiven Vertrauenshierarchie
+    \end{itemize}
+    \item Forest
+    \begin{itemize}
+        \item Einzelne Active Directory-Instanz
+        \item Sammlung von Bäumen, die einen gemeinsamen globalen Katalog nutzen
+        \item Sicherheitsabgrenzung (Security Boundary)
     \end{itemize}
 \end{itemize}
 
+\subsubsection{Security Prinzipien}
+Ist eine Entität, die authentifiziert werden kann (z.B.\ Benutzer, Computer, Gruppen)\\
+\textbf{SID} (Security Identifier) identifiziert einen Security Principal eindeutig.\\
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=.7\linewidth]{./img/03-active_directory/sid}
+    \vspace{-8pt}
+\end{center}
+SID mit der Relativen Identifier ID (RID) 512 sind Domain Admins und somit für Angreifer von hoher bedeutung!
 
-\subsection{Logging}
-Über eine GPO kann ein Logging-Agent (z.B. der Wazuh-Agent) einfach auf allen gewünschten Servern installiert und konfiguriert werden.
-Diesen Agent sollte man so konfigurieren, dass er alle wichtigen und relevanten Logs (z.B. die RDP Logs) ebenfalls an Wazuh weiterleitet.
-Danach sind diese Logs auch innerhalb von Wazuh zentral ersichtlich und filterbar.
-
-Dabei werden die Events aus dem EventLog an Wazu weitergeleitet und es kann somit auch nach der \textit{EventID} gefiltert werden.
-
-\subsubsection{EventID 1149}
-Successful network authentication (successfully executed an RDP network connection).
-
-Event 1149 is logged when there is a successful RDP logon to the computer. Before Windows 7 and Windows Server 2012, 1149 would be logged for any initiation of an RDP connection, so it was not a useful indicator for an actual successful application of user credentials.
-
-But, that has changed, and all modern OS versions will only log 1149 if the username in the event was successfully authenticated. It also includes the IP address of the source of the connection, which is useful information. If an account is used and successfully authenticates but does not have
-permission to RDP to the computer due to other restrictions, event 1149 is not generated.
-
-
-\subsubsection{Phases of RDP-Connection}
-
-\begin{minipage}{0.45\linewidth}
-    \begin{enumerate}
-        \item Connection Initiation
-        \item Basic Settings Exchange
-        \item Channel Connection
-        \item RDP Security Commencement
-        \item Secure Settings Exchange
-        \item Optional Connect-Time Auto-Detection
-        \item Licensing
-        \item Optional Multitransport Bootstrapping
-        \item Capabilities Exchange
-        \item Connection Finalization
-    \end{enumerate}
-\end{minipage}
-\begin{minipage}{0.5\linewidth}
-    \begin{center}
-        \includegraphics[width=1.2\linewidth]{rdp_phases}
-        \vspace{-8pt}
-    \end{center}
-\end{minipage}
-
-\subsubsection{Explain how you filtered every RDP login attempt}
-The TerminalServices-RemoteConnectionManager Log is not forwarded to Wazuh.\\
-Unable to filter for all the attempts.
-With the current Wazu setup, one must filter for Logon Type 3 \& 10 (remote logon types)\\
-
+\subsubsection{ACL: Access Control List}
+Eine access control list (ACL) ist eine Liste von access control entries (ACE). ACE spezifiziert die Zugriffsrechte,allowed, denied oder audited. Der security descriptor für ein Objekt kann 2 Typen von ACL beinhalten.
 \begin{itemize}
-    \item \lstinline|data.win.system.eventID = 4624| or \lstinline|data.win.system.eventID = 4625|
-    \item \lstinline|data.win.sytem.eventID: 4624| and \lstinline|data.win.evendata.logonType: 3|
+    \item Discretionary Access Control (DACL):\\
+    Eine Liste identifiziert die Trustees, denen der Zugriff auf ein sicheres Objekt erlaubt oder verweigert wird
+    \item System Access Control (SACL):\\
+    Ermöglicht Administratoren die Protokollierung von Zugriffsversuchen auf ein gesichertes Objekt
 \end{itemize}
 
-\subsubsection{Explain how you filtered unsuccessful RDP login attempts}
-Um erfolglose RDP Login Versuche im Event Viewer zu suchen, sucht man nach der \lstinline|Event ID: 4625|.\\
+\subsubsection{GPO: Group Policy Objects}
+% TODO: Implement
 
+\subsubsection{Administrators}
 \begin{itemize}
-    \item \lstinline|data.win.eventdata.logonType = 3| or \lstinline|data.win.eventdata.logonType = 10|
-    \item \lstinline|data.win.system.eventID = 4625| and \lstinline|data.win.eventdata.logonType = 3|
+    \item BUILTIN \textbackslash Administrators\\
+    Lokaler Admin-Zugang auf einem Domänencontroller
+    \item Domain Admins\\
+    Administrativer Zugriff auf alle Ressourcen in der zugehörigen Domäne.
+    \item Enterprise Admins\\
+    Existiert nur in der Forest Root. Wird implizit zu ,,Domain Admins`` jeder untergeordneten Domain hinzugefügt.
+    \item Schema Admins\\
+    Kann das Domänen-/Forstschema ändern.
+    \item Server Operators\
+    Kann Domänenserver verwalten.
+    \item Account Operators\\
+    Kann jeden Benutzer verwalten, der nicht zu einer ,,privilegierten`` Gruppe gehört.
 \end{itemize}
 
-\subsection{Kerberos}
-\begin{minipage}{0.45\linewidth}
-    \begin{enumerate}
-        \item Client $\rightarrow$ TGS (Ticket Granting Server = DC): \textit{Anfrage}
-        \item TGS $\rightarrow$ Client: \textit{TGT (Ticket Granting Ticket)}
-        \item Client $\rightarrow$ Fileserver (FS): \textit{TGT}
-        \item FS $\rightarrow$ Client: \textit{schön und gut, will aber spezifisches Ticket}
-        \item Client $\rightarrow$ TGS: \textit{Anfrage spezifisches Ticket für FS}
-        \item TGS $\rightarrow$ Client: \textit{(spezifisches) Ticket für FS}
-        \item Client $\rightarrow$ FS: \textit{(spezifisches) Ticket für FS}
-        \item FS $\rightarrow$ Client: \textit{alles ok}
-    \end{enumerate}
-\end{minipage}
-\begin{minipage}{0.5\linewidth}
-    \begin{center}
-        \includegraphics[width=0.9\linewidth]{kerberos}
-        \vspace{-8pt}
-    \end{center}
-\end{minipage}
+\subsubsection{AD Threats}
+Das AD ist ein zentrales Ziel für Angreifer. Ist die AD gefährdet, ist alles gefährdet! Die AD-Infrastruktur kann sehr komplex sein und ist daher schwer zu konfigurieren und zu pflegen. Häufige Fehlkonfigurationen, die von Angreifern missbraucht werden können:
+\begin{itemize}
+    \item Keine Trennung des privilegierten Zugriffs, z. B. hoch privilegierte Administratoren melden sich interaktiv bei Clients/Servern an
+    \item Dienst- (oder Benutzer-) Konten mit schwachen Passwörtern und SPN, noch schlimmer, wenn die Inhaberschaft verloren geht
+    \item Schwache Passwörter im Allgemeinen
+    \item Gleiches lokales Administrator-Passwort auf allen Computern
+    \item Wiederverwendung von Passwörtern im Allgemeinen
+    \item Anmeldeinformationen auf Freigaben (z. B. Anmeldeskripte auf SYSVOL), auf die jeder Lese-/Schreibzugriff hat
+    \item Fehlen des Prinzips der geringsten Rechte im Allgemeinen (least privilege)
+\end{itemize}
+
+\subsection{Active Directory Information Gathering}\label{subsec:active-directory-information-gathering}
+
+\subsubsection{ADUC: Active Directory Users \& Computers}
+Wird normalerweise zur konfiguration benutzt.
+
+\subsubsection{AD Explorer}
+when you don’t have ADUC, use Sysinternals tools
+
+\subsubsection{Net Tools}
+Im Terminal
+
+\subsubsection{WMI: Windows Management Instrumentation}
+WMI (terminal tool) wird unterschätzt und kann viele Dinge tun:
+\begin{itemize}
+    \item Laufende Prozesse auflisten
+    \item Installierte Antivirenprogramme auflisten
+    \item Installierte Updates auflisten
+    \item Benutzer, Computer und Gruppen in der Domäne auflisten
+    \item Dateien und Registry lesen
+    \item Prozess erstellen (lokal oder remote)
+    \item RDP aktivieren (lokal oder remote)
+\end{itemize}
+
+\subsubsection{PingCastle}
+Ping Castle ist ein Tool zur schnellen Bewertung des Sicherheitsniveaus von Active Directory mit einer Methodik, die auf einer Risikobewertung basiert. Hauptfeatures:
+\begin{itemize}
+    \item Health-check der Domäne
+    \item Kartographie der Domänen-Trusts
+    \item Scanner für verschiedene Einstellungen (LAPS, Lokale Admins, Shares, SMB, Spooler)
+\end{itemize}
+
+\subsection{AADDS: Azure Active Directory Domain Services}\label{subsec:aadds}
+\begin{itemize}
+    \item Cloud-Lösung von Microsoft
+    \item Gleiche Idee wie bei Active Directory vor Ort
+    \item Zentral verwaltete "Domäne" für Enterprise Admins
+    \item GPO nicht zu 100\% in Azure verfügbar
+    \item Richtlinie jetzt im Endpoint Manger Interface von Azure
+    \item Bedingte Zugriffskontrolle (MDM, Mobile Device Management)
+    \item verwendet OpenID Connect und SAML 2.0
+    \item SAML 2.0 wird in der Regel für Identitätsanbieter wie Active Directory Federation Services verwendet
+\end{itemize}
+
+\subsection{GPO: Group Policy Objects}\label{subsec:gpo:-group-policy-objects}
+
+\subsubsection{SYSVOL}
+
+\subsubsection{GPO}
+
+\subsubsection{Folder Policy}
+
+\subsubsection{File Policy}
+
+\subsubsection{Applying Policy}
+
+\subsubsection{Execute Script via GPO}
 
 
+asdfasdf asdfasdf asdf\\
+
+asdfasdf sdf\\
+
+%
+% TODO: Move
+%\subsection{Kerberos}
+%\begin{minipage}{0.45\linewidth}
+%    \begin{enumerate}
+%        \item Client $\rightarrow$ TGS (Ticket Granting Server = DC): \textit{Anfrage}
+%        \item TGS $\rightarrow$ Client: \textit{TGT (Ticket Granting Ticket)}
+%        \item Client $\rightarrow$ Fileserver (FS): \textit{TGT}
+%        \item FS $\rightarrow$ Client: \textit{schön und gut, will aber spezifisches Ticket}
+%        \item Client $\rightarrow$ TGS: \textit{Anfrage spezifisches Ticket für FS}
+%        \item TGS $\rightarrow$ Client: \textit{(spezifisches) Ticket für FS}
+%        \item Client $\rightarrow$ FS: \textit{(spezifisches) Ticket für FS}
+%        \item FS $\rightarrow$ Client: \textit{alles ok}
+%    \end{enumerate}
+%\end{minipage}
+%\begin{minipage}{0.5\linewidth}
+%    \begin{center}
+%        \includegraphics[width=0.9\linewidth]{kerberos}
+%        \vspace{-8pt}
+%    \end{center}
+%\end{minipage}
+%
+%
 
