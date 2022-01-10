@@ -35,7 +35,6 @@ The \textit{overpass-the-hash} attack works similarly to the pass-the-hash attac
 
 With \textit{overpass-the-hash}, you can use this NT hash twice to now request a full Kerberos GTT or service ticket from the KDC on behalf of this compromised user. This technique also opens up the "pass-the-ticket" attack vector, where the forged but valid (before the expiry date) TGT/ST can now be exported and re-injected for future use, bypassing communication with the KDC.
 
-\newpage
 
 \subsubsection{Kerberos Golden Ticket attack}
 A \textit{golden ticket} attack allows an attacker to create a Kerberos authentication ticket from a compromised service account.
@@ -54,7 +53,6 @@ A \textit{Pass-the-Cache} attack is generally the same as Pass-the-Ticket, but u
 
 This technique allows an attacker to replay Kerberos credentials compromised from a Linux system to Windows systems within an Active Directory domain.
 
-\newpage
 
 \subsection{Sysmon}
 
@@ -86,7 +84,6 @@ By adding the following setting to the sysmon Config, the detection of access to
     </ProcessAccess>
 \end{lstlisting}
 
-\newpage
 
 \subsubsection{Would it be possible to log an event where a victim user would start a dangerous makro embedded in a Word file that would execute a power shell script?}
 Yes, it is possible to detect such macros.\\

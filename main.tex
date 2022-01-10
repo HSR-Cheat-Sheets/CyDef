@@ -1,6 +1,6 @@
 %! Licence = CC BY-NC-SA 4.0
 
-%! Author = gianfluetsch
+%! Author = gianfluetsch, mariuszindel
 %! Date = 07.09.2021
 %! Project = Latex-documentation-template
 
@@ -8,30 +8,32 @@
 \input{style/template.tex}
 
 
-\newcommand{\SUBJECT}{CyDef}
-\newcommand{\TITLE}{CyDef Summary}
-\newcommand{\PROF}{Ivan Bütler}
+\newcommand{\TITLE}{Cyber Defense Cheat Sheet}
 
-\newcommand{\VERSION}{30.12.2021}
+\newcommand{\DELIVERYDATE}{\today}
 
 \begin{document}
 
-%import cover and tableofcontents
-    \input{style/cover.tex}
+    \begin{multicols*}{3}
+        \setlength{\columnseprule}{0.4pt}
+        \footnotesize
 
-%import content
-    \input{content/01_cyber-defense.tex}
-    \input{content/02_siem-soar-edr.tex}
-    \input{content/03_active_directory.tex}
-    \input{content/04_mimikatz-sysmon.tex}
-    \input{content/05_spf-dkim-dmarc.tex}
-    \input{content/06_forensic-readiness.tex}
-    \input{content/07_velociraptor.tex}
-    \input{content/08_yara.tex}
-    \input{content/09_red-teaming.tex}
-    \input{content/10_misp.tex}
+        %import tableofcontents
+        \input{style/tableofcontents.tex}
 
-%import appendix
-    % \input{style/appendix.tex}
+
+        %import content
+        \input{content/01_cyber-defense.tex}
+        \input{content/02_siem-soar-edr.tex}
+        \input{content/03_active_directory.tex}
+        \input{content/04_mimikatz-sysmon.tex}
+        \input{content/05_spf-dkim-dmarc.tex}
+        \input{content/06_forensic-readiness.tex}
+        \input{content/07_velociraptor.tex}
+        \input{content/08_yara.tex}
+        \input{content/09_red-teaming.tex}
+        \input{content/10_misp.tex}
+
+    \end{multicols*}
 
 \end{document}

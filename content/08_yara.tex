@@ -94,7 +94,6 @@ Let's figure out running processes
 
 Looking at the above listing, nothing appears out of the ordinary. Although process alg.exe is present and can sometimes be used to indicate the presence of malware, as a lone indicator, it is not sufficient to warrant further investigation at this point as it is typically considered a legitimate Windows XP process. Perhaps the next plugin, psscan, will reveal more information.
 
-\newpage
 
 \subsubsection{pstree}
 \textit{pstree} can be used to show the processes as a tree.
@@ -136,7 +135,6 @@ Volatility provides an additional capability for detecting hidden running proces
 
 Based on the plugin's output, no hidden processes were found for this memory image. Although some processes may be listed as hidden by the csrss method, they generally are not hidden. Therefore any process marked as hidden (FALSE) by this method requires that another method (pslist, psscan, thrdproc and pspcdid) confirm the suspicion. For Windows 7 and Vista systems, the list of internal processes is not available, and in some cases where Windows XP required memory pages might have been swapped out, the outcome of csrss may be affected.
 
-\newpage
 
 \subsubsection{cmdscan}
 The \textit{cmdscan} and consoles plugins may reveal additional information about commands typed into a command shell. The \textit{cmdscan} plugin is used to query the process memory of csrss.exe or conhost.exe for possible commands that may have been entered into the system shell (cmd.exe; i.e. PID 544) or through a backdoor or RDP session by an attacker. Specifically, it looks for COMMAND\_HISTORY based structures left behind in memory.
@@ -185,7 +183,6 @@ The first network-based Volatility plugin that should be used is \textit{connsca
 
 Based on this information, PID 1956 (explorer.exe) has established a connection with remote system 172.16.98.1 using port 6666. This port is a well-known malware based port. The original IP address was 207.158.22.134 and was found communicating on port 443.
 
-\newpage
 
 \subsubsection{procdump}
 \textit{procdump} can be used to dump the malicious process.

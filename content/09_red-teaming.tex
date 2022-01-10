@@ -167,7 +167,7 @@ Wenn Sie über lokale administrative Rechte auf einem Windows-Rechner verfügen,
 
 Logs anschauen, da ist vieles drin wie username, dmain, credentials, UND NTLM HASHES, die sind am wichtigsten. kann für pass the hash attacken genutzt werden
 
-\newpage
+
 
 \subsection{Step 5A: Lateral Movement to FS1 via Domain User}
 In den vorangegangenen Übungen konnten wir uns lokale Administratorrechte auf dem Windows 10-Client verschaffen und anschließend alle auf diesem Rechner gespeicherten Anmeldeinformationen auslesen. Die gesammelten Daten enthielten unter anderem den NTLM-Hash des Domänenbenutzers "aalfort", der lokaler Administrator auf dem Rechner FS1.winattacklab.local ist.
@@ -222,7 +222,7 @@ $\rightarrow$ Python Script für pass the hash attacken: \lstinline|psexec.py|\\
 \subsubsection{CrackMapExec}
 Mit dem NTLM-Hash des Helpdesk-Benutzers können wir nun mit einem Tool namens CrackMapExec leicht überprüfen, ob dasselbe lokale Benutzerkonto (mit demselben Passwort) auf anderen Systemen existiert.
 
-\newpage
+
 
 \subsection{Step 6: Situational Awareness on FS1}
 Wir haben nun Zugriff auf den Host FS1.winattacklab.local mit administrativen Rechten erhalten. Das bedeutet, dass wir nicht mehr nach lokalen Methoden zur Privilegienerweiterung suchen müssen. Stattdessen ist das Ziel, andere wertvolle Informationen zu finden, die uns helfen könnten, andere Benutzer oder Hosts zu kompromittieren.
@@ -262,12 +262,12 @@ Dies zeigt an, dass eine Datei für die unbeaufsichtigte Installation gefunden w
     File     : C:\Windows\Panther\Unattend.xml
 \end{lstlisting}
 
-PrivescCheck die Datei direkt geparst und das Passwort \textcolor{OSTPink}{\textit{Winter2019}} für den Benutzer \textcolor{OSTPink}{\textit{admin}} gefunden.
+PrivescCheck die Datei direkt geparst und das Passwort \textcolor{red}{\textit{Winter2019}} für den Benutzer \textcolor{red}{\textit{admin}} gefunden.
 
 \subparagraph{unattend.xml}\mbox{} \\
 Antwortdateien (oder Unattend-Dateien) können verwendet werden, um Windows-Einstellungen in Ihren Images während der Einrichtung zu ändern. Sie können auch Einstellungen erstellen, die Skripte in Ihren Images auslösen, die ausgeführt werden, nachdem der erste Benutzer sein Konto erstellt und seine Standardsprache ausgewählt hat.
 
-\newpage
+
 
 \subsection{Step 7: Password Spraying}
 Auf dem Host FS1 konnten wir eine Datei abrufen, die ein Kennwort enthielt. Das Kennwort lautete "Winter2019", was einem Standardkennwort sehr ähnlich sieht, wie es von einem Servicedesk beim Zurücksetzen eines Kennworts vergeben werden könnte.
@@ -275,7 +275,7 @@ Eine gängige Angriffstechnik besteht darin, dieses Passwort nun für alle Benut
 
 \subsubsection{Automate Passwort Spraying}
 Es gibt eine Vielzahl von Tools, mit denen sich das Sprühen von Kennwörtern automatisieren lässt. Einige Tools stellen eine direkte Verbindung zum Active Directory her, um eine Liste aller Benutzer abzurufen, bei anderen müssen Sie diese Informationen selbst bereitstellen.
-In diesem Fall werden wir ein Tool namens \textcolor{OSTPink}{\textit{kerbrute}} verwenden, das eine Benutzerliste benötigt.
+In diesem Fall werden wir ein Tool namens \textcolor{red}{\textit{kerbrute}} verwenden, das eine Benutzerliste benötigt.
 
 \subsubsection{Checking the Password Lockout Policy}
 Ein wichtiger Punkt bei der Durchführung von Passwort-Spraying ist, dass Benutzerkonten nicht wegen zu vieler fehlgeschlagener Anmeldungen gesperrt werden dürfen
@@ -294,7 +294,7 @@ Mit einem Tool wie proxychain kann dies aber umgangen werden, da damit die IP-Ad
 \subsubsection{Bloodhound}
 Bloodhound kann weiterhin verwendet werden, um eine Übersicht über alle kompromitierten Systeme zu erhalten. Dabei kann nun jeweils das neu übernommene System/ Account als "owned" markiert werden und Bloodhound kann so neue Angriffsmöglichkeiten/ Angriffswege berechnen.
 
-\newpage
+
 
 \subsection{Step 8: Lateral Movement to WS1}
 In der vorherigen Aufgabe haben wir erfolgreich die Klartext-Anmeldeinformationen des Benutzers "cclear" abgerufen, der lokaler Administrator des Rechners WS1 ist. Versuchen wir nun, dies zu verifizieren.
@@ -319,7 +319,7 @@ Mit diesem Tool können Sie ganz einfach (mehrere Sätze von) Anmeldeinformation
 
 CrackMapExec kann auch verwendet werden, um eine Anmeldung auf mehreren Systemen zu testen. Z.B. können alle Rechner in einem Subnet getestet werden.
 
-\newpage
+
 
 \subsection{Step 9: Situational Awareness \& Credential Dumping on WS1}
 Wir sind erfolgreich auf den Host WS1 umgezogen und haben nun auch auf diesem Rechner lokale administrative Rechte. Es ist Zeit, den nächsten Schritt zu planen.
@@ -346,7 +346,7 @@ Nun kann der Dump vom Server auf den Client kopiert und dort analysiert werden.
 
 \paragraph{Planning the Attack}\mbox{} \\
 Anstatt Mimikatz auf WS1 zu kopieren, können wir auch einfach einen Speicherauszug des lsass-Prozesses (der die zwischengespeicherten Anmeldeinformationen aufbewahrt) erstellen und diesen Auszug dann auf unserem eigenen Rechner analysieren.
-Ein nützliches Tool hierfür ist das Dienstprogramm \textcolor{OSTPink}{\textit{ProcDump}} aus der Windows Sysinternals Suite.
+Ein nützliches Tool hierfür ist das Dienstprogramm \textcolor{red}{\textit{ProcDump}} aus der Windows Sysinternals Suite.
 Auf der Grundlage der bisherigen Beobachtungen können wir den folgenden Angriffsplan formulieren:\\
 
 \begin{enumerate}
@@ -359,18 +359,18 @@ Auf der Grundlage der bisherigen Beobachtungen können wir den folgenden Angriff
 
 \paragraph{Remotely Disable Windows Defender}\mbox{} \\
 Als Alternative zum obigen Ansatz könnten wir auch versuchen, Windows Defender einfach per Fernzugriff zu deaktivieren, da wir technisch gesehen die volle Kontrolle über den Host WS1 haben.
-Um die Echtzeitschutzfunktion von Defender zu deaktivieren, kann ein PowerShell-Befehl mit dem Tool \textcolor{OSTPink}{\textit{atexec.py}} verwendet werden.
+Um die Echtzeitschutzfunktion von Defender zu deaktivieren, kann ein PowerShell-Befehl mit dem Tool \textcolor{red}{\textit{atexec.py}} verwendet werden.
 
 \paragraph{Procdump}\mbox{} \\
-Nun muss Procdump auf den Server kopiert und schlussendlich via \textcolor{OSTPink}{\textit{psexec.py}} remote ausgeführt werden.
+Nun muss Procdump auf den Server kopiert und schlussendlich via \textcolor{red}{\textit{psexec.py}} remote ausgeführt werden.
 Nun kann auf dem Server ein Dump generiert werden.
 
-Dieses erstellte Dump-File (lsass.dmp) kann via \textcolor{OSTPink}{\textit{smbclient.py}} auf den lokalen Linux Attack Client kopiert werden.
+Dieses erstellte Dump-File (lsass.dmp) kann via \textcolor{red}{\textit{smbclient.py}} auf den lokalen Linux Attack Client kopiert werden.
 
 \subsubsection{Analyzing the Dump}
 
 \paragraph{Using Pypykatz}\mbox{} \\
-Da sich der Dump von lsass.exe nun auf unserem lokalen Rechner befindet, haben wir mehrere Möglichkeiten, ihn zu analysieren. Eine Möglichkeit wäre, ihn auf unseren Windows-Client zu kopieren und ihn an Mimikatz zu übergeben. Diesmal wollen wir jedoch ein Linux-Tool namens \textcolor{OSTPink}{\textit{pypykatz}} verwenden.
+Da sich der Dump von lsass.exe nun auf unserem lokalen Rechner befindet, haben wir mehrere Möglichkeiten, ihn zu analysieren. Eine Möglichkeit wäre, ihn auf unseren Windows-Client zu kopieren und ihn an Mimikatz zu übergeben. Diesmal wollen wir jedoch ein Linux-Tool namens \textcolor{red}{\textit{pypykatz}} verwenden.
 Dieses Tool ist im Wesentlichen eine Python-Implementierung von Mimikatz und ist bereits auf Ihrem Linux-Angriffshost installiert.\\
 
 \textbf{ACHTUNG}: Je nachdem, wie Sie den lsass-Dump erstellt haben, kann Ihre Dump-Datei einen anderen Namen haben:\\
@@ -379,7 +379,7 @@ Dieses Tool ist im Wesentlichen eine Python-Implementierung von Mimikatz und ist
     \item lsass\_procdump.dmp, wenn sie über ProcDump erstellt wurde (Option B)\\
 \end{itemize} 
 
-\textcolor{OSTPink}{\textbf{Mit den gefundenen Credentials im Memory-Dump ist man nun im Besitz von Domain-Admin Rechten!!!}}
+\textcolor{red}{\textbf{Mit den gefundenen Credentials im Memory-Dump ist man nun im Besitz von Domain-Admin Rechten!!!}}
 
 \subsubsection{Updating Bloodhound}
 Bloodhound kann weiterhin verwendet werden, um eine Übersicht über alle kompromitierten Systeme zu erhalten. Dabei kann nun jeweils das neu übernommene System/ Account als "owned" markiert werden und Bloodhound kann so neue Angriffsmöglichkeiten/ Angriffswege berechnen.
@@ -392,14 +392,14 @@ Nun wollen wir sehen, was wir mit diesen Berechtigungsnachweisen tun können.
 \subsubsection{DCSync}
 
 \paragraph{Overview}\mbox{} \\
-Wie zuvor können wir verschiedene Tools verwenden, um uns direkt als ffast bei anderen Systemen zu authentifizieren, indem wir den Pass-the-Hash-Angriff verwenden. Wir haben bereits Tools wie \textcolor{OSTPink}{\textit{psexec.py}} oder \textcolor{OSTPink}{\textit{smbclient.py}} aus der Impacket-Sammlung kennengelernt.
+Wie zuvor können wir verschiedene Tools verwenden, um uns direkt als ffast bei anderen Systemen zu authentifizieren, indem wir den Pass-the-Hash-Angriff verwenden. Wir haben bereits Tools wie \textcolor{red}{\textit{psexec.py}} oder \textcolor{red}{\textit{smbclient.py}} aus der Impacket-Sammlung kennengelernt.
 Es gibt jedoch noch viel mehr Möglichkeiten. Die Impacket-Sammlung bietet eine Menge interessanter Werkzeuge, um mit anderen Systemen auf der Basis von pass-the-hash zu interagieren.
 
 \paragraph{Acquiring NTLM Hashes of Other Users}\mbox{} \\
 Mit Domänenadministratorrechten können wir unsere eigenen Benutzer erstellen und ihnen alle gewünschten Rechte innerhalb der Domäne zuweisen. Manchmal kann es jedoch interessanter sein, Anmeldeinformationen (d. h. NTLM-Hashes) von bereits vorhandenen Benutzern zu erhalten.\\
 
-Eine gängige Technik zur Beschaffung dieser Anmeldeinformationen ist \textcolor{OSTPink}{\textit{DCSync}}.\\
-Dieser Angriff kann mit einem anderen Tool aus der Impacket-Sammlung namens \textcolor{OSTPink}{\textit{secretsdump.py}} durchgeführt werden
+Eine gängige Technik zur Beschaffung dieser Anmeldeinformationen ist \textcolor{red}{\textit{DCSync}}.\\
+Dieser Angriff kann mit einem anderen Tool aus der Impacket-Sammlung namens \textcolor{red}{\textit{secretsdump.py}} durchgeführt werden
 
 \paragraph{RDP to DC as ffast (Domain User)}\mbox{} \\
 Da wir nicht über die tatsächlichen Anmeldeinformationen (d. h. das Kennwort) des Benutzers ffast verfügen, können wir den normalen Windows-RDP-Client nicht verwenden, um eine Verbindung zum Domänencontroller als ffast zu öffnen.\\
@@ -418,12 +418,12 @@ An diesem Punkt haben wir zwei Möglichkeiten:\\
 \end{enumerate}
 
 Nehmen wir die Option 2). Wir wissen bereits aus früheren Übungen, dass einige Impacket-Tools vom Defender erkannt werden, während andere nicht erkannt werden. Ein solches Beispiel ist atexec.py, das über den Taskplaner-Dienst Befehle auf einem entfernten System ausführen kann.
-Der \textcolor{OSTPink}{\textit{Restricted Admin Mode}} kann mit einem PowerShell-Befehl aktiviert werden. Gesteuert wird die Aktivierung/ Deaktivierung über einen RegKey.
+Der \textcolor{red}{\textit{Restricted Admin Mode}} kann mit einem PowerShell-Befehl aktiviert werden. Gesteuert wird die Aktivierung/ Deaktivierung über einen RegKey.
 
 \paragraph{RDP Attempt}\mbox{} \\
 Nun kann über Mimikatz eine RDP-Connection aufgebaut werden. Dabei müssen in der RDP-Connection keine Credentials angegeben werden, sondern es wird der entsprechende Hash von Mimikatz verwendet und der User schlussendlich authentifiziert.
 
-\newpage
+
 
 \subsection{Step 11: Responder \& NTLM Relaying}
 
@@ -446,7 +446,7 @@ In Azure (wo die Windows Attack Lab-Infrastruktur gehostet wird) werden Broadcas
 Dies wird im Windows-Angriffslabor behoben, indem ein System regelmäßig eine direkte Verbindung zum Linux-Angriffshost herstellt und so einen erfolgreichen LLMNR/NBT-NS-Poisoning-Angriff simuliert.
 
 \paragraph{Detecting relayable connections}\mbox{} \\
-Um potenzielle Ziele für einen Relaying-Angriff zu erkennen, kann das Tool \textcolor{OSTPink}{\textit{Responder}} verwendet werden.
+Um potenzielle Ziele für einen Relaying-Angriff zu erkennen, kann das Tool \textcolor{red}{\textit{Responder}} verwendet werden.
 
 \subsubsection{Relaying the Connection}
 
@@ -461,7 +461,7 @@ Um die eingehende Verbindung weiterleiten zu können, müssen wir eine Liste mö
 \end{itemize}
 
 \paragraph{Start Relaying}\mbox{} \\
-Jetzt können wir mit der Weiterleitung der eingehenden Verbindungen an die vorbereiteten Ziele beginnen. Das Relaying wird mit dem Tool \textcolor{OSTPink}{\textit{ntlmrelayx.py}} aus der Impacket-Sammlung durchgeführt.
+Jetzt können wir mit der Weiterleitung der eingehenden Verbindungen an die vorbereiteten Ziele beginnen. Das Relaying wird mit dem Tool \textcolor{red}{\textit{ntlmrelayx.py}} aus der Impacket-Sammlung durchgeführt.
 
 \subsection{Step 12: Lateral Movement to WS1 (CrackMapExec)}
 
