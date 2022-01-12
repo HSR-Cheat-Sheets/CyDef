@@ -165,21 +165,60 @@ Ping Castle ist ein Tool zur schnellen Bewertung des Sicherheitsniveaus von Acti
 \subsection{GPO: Group Policy Objects}\label{subsec:gpo:-group-policy-objects}
 
 \subsubsection{SYSVOL}
+\begin{itemize}
+    \item Das System-Volume (SYSVOL) ist ein spezielles Verzeichnis auf jedem DC
+    \item Besteht aus mehreren Ordnern, von denen einer gemeinsam genutzt wird und als SYSVOL-Freigabe bezeichnet wird.
+    \item Der Standardspeicherort ist \%SYSTEMROOT\%\textbackslash SYSVOL\textbackslash sysvol
+    \item Kann während DC-Promotion-Prozesses oder später geändert werden.
+    \item SYSVOL setzt sich aus Ordnern zusammen:
+    \begin{itemize}
+        \item Gruppenrichtlinienvorlagen (GPTs), die über die SYSVOL-Replikation repliziert werden.
+        \item Der Gruppenrichtlinien Container (GPC) wird über die Active Directory-Replikation repliziert.
+        \item Skripte, wie z. B. Startskripte, auf die in einem GPO verwiesen wird.
+    \end{itemize}
+\end{itemize}
 
 \subsubsection{GPO}
+\begin{itemize}
+    \item Ein Gruppenrichtlinienobjekt (GPO) ist eine virtuelle Sammlung von Richtlinien Einstellungen.
+    \item Ein GPO hat einen eindeutigen Namen, z. B. eine GUID.
+    \item Gruppenrichtlinieneinstellungen sind in einem GPO enthalten. Ein GPO kann Richtlinieneinstellungen im Dateisystem und im Active Directory darstellen.
+    \item Die GPO-Einstellungen werden von den Clients ausgewertet.
+    \item Um eine Gruppenrichtlinie zu erstellen, kann ein Administrator den Group Policy Object Editor verwenden
+\end{itemize}
 
 \subsubsection{Folder Policy}
+\begin{itemize}
+    \item Erstellt ein Ordner auf jedem Computer in der Domain
+\end{itemize}
 
 \subsubsection{File Policy}
+\begin{itemize}
+    \item Erstellt ein File auf jedem Computer in der Domain
+    \item Source (z.B. SYSVOL) und Destination (z.B. C-Laufwerk) wird angegeben
+\end{itemize}
 
 \subsubsection{Applying Policy}
+\textbf{Auf Server direkt}
+\begin{itemize}
+    \item Auf dem server als Admin \texttt{\small gpupdate/force} in cmd.exe ausführen
+\end{itemize}
+
+\textbf{Auf DC für alle}
+%TODO: Check if compiled correctly
+\begin{itemize}
+    \item Auf Domain Controller PowerShell öffnen als Admin
+    \item \texttt{\small \$computers = Get-ADComputer -Filter *}
+    \item \texttt{\small \$computers | ForEach-Object -Process {Invoke-GPUpdate -Computer \$\_.name -RandomDelayInMinutes 0 -Force}}
+\end{itemize}
 
 \subsubsection{Execute Script via GPO}
-
-
-asdfasdf asdfasdf asdf\\
-
-asdfasdf sdf\\
+\begin{itemize}
+    \item GPO Editor
+    \item Policies $\rightarrow$ Preferences $\rightarrow$ Control Panel Settings
+    \item Schedule Task
+    \item Select Location of script
+\end{itemize}
 
 %
 % TODO: Move
