@@ -88,9 +88,6 @@ Eine access control list (ACL) ist eine Liste von access control entries (ACE). 
     Ermöglicht Administratoren die Protokollierung von Zugriffsversuchen auf ein gesichertes Objekt
 \end{itemize}
 
-\subsubsection{GPO: Group Policy Objects}
-% TODO: Implement
-
 \subsubsection{Administrators}
 \begin{itemize}
     \item BUILTIN \textbackslash Administrators\\
@@ -205,11 +202,10 @@ Ping Castle ist ein Tool zur schnellen Bewertung des Sicherheitsniveaus von Acti
 \end{itemize}
 
 \textbf{Auf DC für alle}
-%TODO: Check if compiled correctly
 \begin{itemize}
     \item Auf Domain Controller PowerShell öffnen als Admin
-    \item \texttt{\small \$computers = Get-ADComputer -Filter *}
-    \item \texttt{\small \$computers | ForEach-Object -Process {Invoke-GPUpdate -Computer \$\_.name -RandomDelayInMinutes 0 -Force}}
+    \item \texttt{\scriptsize \$computers = Get-ADComputer -Filter *}
+    \item \texttt{\scriptsize \$computers | ForEach-Object -Process {Invoke-GPUpdate -Computer \$\_.name -RandomDelayInMinutes 0 -Force}}
 \end{itemize}
 
 \subsubsection{Execute Script via GPO}
@@ -220,27 +216,23 @@ Ping Castle ist ein Tool zur schnellen Bewertung des Sicherheitsniveaus von Acti
     \item Select Location of script
 \end{itemize}
 
-%
-% TODO: Move
-%\subsection{Kerberos}
-%\begin{minipage}{0.45\linewidth}
-%    \begin{enumerate}
-%        \item Client $\rightarrow$ TGS (Ticket Granting Server = DC): \textit{Anfrage}
-%        \item TGS $\rightarrow$ Client: \textit{TGT (Ticket Granting Ticket)}
-%        \item Client $\rightarrow$ Fileserver (FS): \textit{TGT}
-%        \item FS $\rightarrow$ Client: \textit{schön und gut, will aber spezifisches Ticket}
-%        \item Client $\rightarrow$ TGS: \textit{Anfrage spezifisches Ticket für FS}
-%        \item TGS $\rightarrow$ Client: \textit{(spezifisches) Ticket für FS}
-%        \item Client $\rightarrow$ FS: \textit{(spezifisches) Ticket für FS}
-%        \item FS $\rightarrow$ Client: \textit{alles ok}
-%    \end{enumerate}
-%\end{minipage}
-%\begin{minipage}{0.5\linewidth}
-%    \begin{center}
-%        \includegraphics[width=0.9\linewidth]{kerberos}
-%        \vspace{-8pt}
-%    \end{center}
-%\end{minipage}
-%
-%
+\subsection{Kerberos}
+\begin{minipage}{0.45\linewidth}
+    \begin{enumerate}
+        \item Client $\rightarrow$ TGS (Ticket Granting Server = DC): \textit{Anfrage}
+        \item TGS $\rightarrow$ Client: \textit{TGT (Ticket Granting Ticket)}
+        \item Client $\rightarrow$ Fileserver (FS): \textit{TGT}
+        \item FS $\rightarrow$ Client: \textit{schön und gut, will aber spezifisches Ticket}
+        \item Client $\rightarrow$ TGS: \textit{Anfrage spezifisches Ticket für FS}
+        \item TGS $\rightarrow$ Client: \textit{(spezifisches) Ticket für FS}
+        \item Client $\rightarrow$ FS: \textit{(spezifisches) Ticket für FS}
+        \item FS $\rightarrow$ Client: \textit{alles ok}
+    \end{enumerate}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+    \begin{center}
+        \includegraphics[width=0.9\linewidth]{kerberos}
+        \vspace{-8pt}
+    \end{center}
+\end{minipage}
 
