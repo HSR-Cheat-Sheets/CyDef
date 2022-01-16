@@ -64,3 +64,21 @@ Client $\rightarrow$ WAF $\rightarrow$ APP $\rightarrow$ API $\rightarrow$ DB
     \item Ohne die Unique-ID sind Unternehmen aufgeschmissen und müssen sich auf Zeitstempel verlassen.
 \end{itemize}
 
+
+\subparagraph{Forensic rediness}
+
+\subsection{Forensic Readiness Apache Reverse Proxy}
+Distributed systems, and those using microservices architectures in particular, scatter the order's log messages further, across multiple locations, to be gathered by centralised logging tools. To make it straightforward to investigate problems, you need a way to group the log messages that relate to a particular order, in all of your systems or services.
+
+\subsubsection{Unique-ID}
+Correlation IDs provide the standard solution to this problem. A correlation ID uniquely identifies each \glqq customer order\grqq, or the equivalent in your system. Similarly, web-based applications have \glqq user requests\grqq, for each user interaction
+
+\subsubsection{How do you enable the unique-id in the apache?}
+By using the \lstinline|mod_unique_id| module.
+
+\subsubsection{How do you log the unique-id into the forensic log}
+\lstinline|mod_log_forensic| is included in most distribution packages of Apache and comes with the source tarball download, but if you compile Apache 2.x.x from source, you need to add \lstinline|--enable-log-forensic| and \lstinline|--enable-unique-id| to the configure line.
+
+\subsubsection{How do you inject the unique-id to the backend service?}
+By adding the \textit{UNIQUE\_ID} into the following Request Header towards to backend service. On both parts it will be logged for logs/ time correlation.
+

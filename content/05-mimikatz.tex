@@ -121,9 +121,6 @@ $ $
     \item Erfordert bestimmte Berechtigungen (standardmässig nur Domänenadministratoren und Domänencontroller)
 \end{itemize}
 
-\subsection{Cobalt Strike}
-%TODO: What is cobalt strike?
-
 \subsection{DPAPI}
 
 Die data protection API (DPAPI) bietet eine Reihe von API-Aufrufen (CryptProtectData / CryptUnprotectData), die es Anwendungen ermöglichen, Daten-"Blobs" auf einem System zu verschlüsseln/entschlüsseln
@@ -171,7 +168,7 @@ Zum Entschlüsseln von Machine Secrets wird das DPAPI\_SYSTEM LSA Secret benöti
 \subsubsection{Credentials, Vaults, .rdg, Chrome, ...}
 Credentials werden im Credentials-Ordnern aufbewahrt: in sich geschlossene Strukturen\\
 Vaults werden in Vaults-Ordnern aufbewahrt, haben eine Policy.vpol, die mit einem Hauptschlüssel entschlüsselt wird, zwei AES Schlüssel innerhalb der Richtlinie werden dann zur Entschlüsselung einer oder mehrerer .vcrd-Dateien verwendet.\\
-Mimikatz kann diese entschlüsseln (mit SHA1 des Masterkeys). %TODO: Stimmt das?
+Mimikatz kann diese entschlüsseln (mit SHA1 des Masterkeys). %TODO: Stimmt das? -> worschindli schu
 
 \subsection{Credential Abuse Countermeasures}
 \subsubsection{Was KB2871997 macht (Verbesserung von Microsoft)}
