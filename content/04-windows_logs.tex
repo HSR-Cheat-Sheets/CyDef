@@ -8,6 +8,111 @@
 \section{Windows Logs}
 %TODO: update whole content
 
+\subsection{TLP (Traffic Light Protocol)}
+\begin{itemize}
+    \item RED $\rightarrow$ Infos sind auf den \textbf{Kreis der Anwesenden} beschränkt $\rightarrow$ Weitergabe ist untersagt
+    \item Amber $\rightarrow$ infos darf der Empfänger \textbf{innerhalb seiner Organisation} aus Basis “Kenntnis \textbf{nur wenn nötig}” weitergeben
+    \item Green $\rightarrow$ infos dürfen \textbf{innerhalb der Organisation} und an deren Partner weitergegeben, aber \textbf{nicht veröffentlicht} werden
+    \item White (default) $\rightarrow$ abgesehen von \textbf{urheberrechtlichen Aspekten} dürfen die Infos \textbf{ohne Einschränkungen} weitergegeben werden
+\end{itemize}
+
+\subsection{Event Log Introduction}
+
+\subsubsection{Event Log Categories}
+\begin{itemize}
+    \item \textbf{Security.evtx}
+    \begin{itemize}
+        \item access control and seucrity information
+        \item only written by \textit{LSASS} process (based on GPO Settings)
+        \item \glqq Security Event Log\grqq is \textcolor{red}{most important for cyber defense}
+        \item System events, logon, account, privilege used, account management, object access, directory service, process tracking
+    \end{itemize}
+    \item \textbf{System.evtx}
+    \begin{itemize}
+        \item windows system events (driver, service, ressources)
+    \end{itemize}
+    \item \textbf{Application.evtx}
+    \begin{itemize}
+        \item non system related software events
+    \end{itemize}
+    \item \textbf{<Custom>.evtx}
+    \begin{itemize}
+        \item around 150 different custom application logs
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Security.evtx - Account Monitoring}
+\textbf{Event IDs}
+\begin{itemize}
+    \item 4720 - Account Creation
+    \item 4624 - Successful Logon
+    \item 4625 - Failed Logon
+    \item 4624/ 4647/ 4634 - Successful Logoff
+    \item 4738 - A user account was changed (permissions granted or similar)
+    \item 4648 - Logon with explicit credentials
+    \item 4776 - Local account authentication (NTLM authentication)
+    \item 4672 - Special privileges assigned to new logon
+    \item 4779 - A user disconnected a terminal server session without logging off
+\end{itemize}
+
+\subsubsection{Logon Type}
+\begin{tabular}{ l | p{6cm} }
+     2 & \textbf{Interactive} (logon at keyboard and screen of system) \\
+     3 & \textbf{Network} (i.e. connection to shared folder on this computer from elsewhere on network) \\  
+     4 & Batch (e.g. scheduled task) \\  
+     5 & \textbf{Service} (Service startup) \\
+     7 & Unlock (i.e. unnattended workstation with password protected screen saver) \\
+     8 & NetworkCleartext: Logon with credentials sent in the clear text. Most often indicates a logon to IIS with basic authentication. \\
+     9 & NewCredentials such as with RunAs or mapping a network drive with alternate credentials. ''A caller cloned its current token and specified new credentials for outbound connections. The new logon session has the same local identity, but uses different credentials for other network connections.'' \\
+     10 & \textbf{RemoteInteractive} (Terminal Services, Remote Desktop or Remote Assistance) \\
+     11 & CachedInteractive (logon with cached domain credentials such as when logging on to a laptop when away from the network)
+\end{tabular}
+
+\subsubsection{EventLog Size}
+\begin{itemize}
+    \item Every Event Log has a maximum size (default 20Mb)
+    \item Empfohlen: Security-Log auf 4-8 GB vergrössern $\rightarrow$ ist bei Security Incidents das wichtigste Log!
+    \item Three Options when the maximum size is reached
+    \begin{enumerate}
+        \item Overwrite events as needed $\rightarrow$ Starts rotating events out
+        \item Archive the log when full $\rightarrow$ Creates Files like “Archive-Security-<Date>.evtx
+        \item Do not overwrite events $\rightarrow$ Error Message is generated upon full log
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection{LSASS Process}
+Local Security Authority Subsystem Service (LSASS) ist ein Prozess in Microsoft Windows-Betriebssystemen, der für die Durchsetzung der Sicherheitsrichtlinien auf dem System verantwortlich ist. 
+Er überprüft Benutzer, die sich bei einem Windows-Computer oder -Server anmelden, bearbeitet Kennwortänderungen und erstellt Zugriffstoken.\\
+
+\textit{lsass.exe} ist ein Windows-Prozess, der sich um die Sicherheitsrichtlinien des Betriebssystems kümmert. 
+Wenn sich zum Beispiel jemand bei einem Windows-Client oder -Server anmeldet, überprüft \textit{lsass.exe} den Benutzernamen und das Kennwort. 
+Wenn \textit{lsass.exe} beendet wird, wird der Benutzer von Windows abgemeldet.
+\textit{lsass.exe} schreibt auch in das Windows Security-Log, so dass dort nach fehlgeschlagenen Authentifizierungsversuchen und anderen Sicherheitsrichtlinienproblemen gesucht werden kann.
+
+\subsection{Malicious Activity Detection}
+
+\subsubsection{Clearing (Deleting) Event Logs}
+\begin{itemize}
+    \item Usually results in an event \textbf{1102}
+    \item \textit{Note}: There are tools that allow event log editing without an event showing (Mimikatz, etc.)
+\end{itemize}
+
+\subsubsection{Logon Status and Sub Status Codes}
+\begin{tabular}{ l | p{4.5cm} }
+    0xC0000064 & \textbf{user name does not exist} \\
+    0xC000006A & \textbf{user name is correct but the password is wrong} \\  
+    0xC0000234 & user is currently locked out \\  
+    0xC0000072 & account is currently disabled \\
+    0xC000006F & \textbf{user tried to logon outside his day of week or time of day rextriction} \\
+    0xC0000070 & \textbf{workstation restriction or Authentication Policy Silo violation} (look for event ID 4820 on DC) \\
+    0xC0000193 & account expiration \\
+    0xC0000071 & expired password \\
+    0xC0000133 & clocks between DC and other computer too far out of sync \\
+    0xC0000224 & user is required to change password at next logon \\
+    0xC0000225 & evidently a bug in Windows and not a risk \\
+    0xc000015b & The user has not been granted the requested logon type (aka logon right) at this machine
+\end{tabular}
+
 \subsection{Logging}
 Über eine GPO kann ein Logging-Agent (z.B. der Wazuh-Agent) einfach auf allen gewünschten Servern installiert und konfiguriert werden. Diesen Agent sollte man so konfigurieren, dass er alle wichtigen und relevanten Logs (z.B. die RDP Logs) ebenfalls an Wazuh weiterleitet. Danach sind diese Logs auch innerhalb von Wazuh zentral ersichtlich und filterbar.
 
