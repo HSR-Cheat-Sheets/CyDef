@@ -101,83 +101,216 @@ Hacker löscht einen bestehenden DNS entry auf dem orginalen DNS Server und erse
     \item Setup System Proxy with malicious trusted root certificate authority
 \end{itemize}
 
-
 \subsubsection{Client Manipulation: URL Redirections}
-
-\subsection{Unencrypted MitM Attack}\label{subsec:unencrypted-mitm-attack}
-(dns, http, dhcp, telnet, arp, snmp, smtp)
-\begin{itemize}
-    \item Passive
-    \item Intercepting
-\end{itemize}
+Client erhlt einen URL vom Angreifer. Dieser sieht vertrauenswürdig aus. Schlussendlich wird jedoch ein redirect ausgeführt, welcher dann beim Angreifer landet. Kann z.B. DNS Nameserver change auslösen.
 \begin{center}
     \vspace{-8pt}
-    \includegraphics[width=1.0\linewidth]{./img/09-mitm/mitm_unenctypt_1}
+    \includegraphics[width=1.0\linewidth]{./img/09-mitm/redirecting}
     \vspace{-8pt}
 \end{center}
+
+\subsection{MITM Angriff: Unencrypted}\label{subsec:unencrypted-mitm-attack}
+(dns, http, dhcp, telnet, arp, snmp, smtp)
+\begin{itemize}
+    \item Passive (Read traffic)
+    \item Intercepting (Terminate Service)
+    \item Redirecting (to third party server, phishing)
+\end{itemize}
+MITM kann alle Daten direkt mitlesen, verändern, umleiten oder blockieren!
 \begin{center}
     \vspace{-8pt}
     \includegraphics[width=1.0\linewidth]{./img/09-mitm/mitm_unenctypt_2}
     \vspace{-8pt}
 \end{center}
 
-%\subsubsection{Unverschlüsselte Kommunikation}
-%\begin{enumerate}
-%    \item Lesen aller Daten (PW, Kreditkarte, Mail)
-%    \item Manipulieren aller Daten
-%    \item Drop (DoS)\\
-%\end{enumerate}
-%
-%\textbf{Strategien}:
-%\begin{itemize}
-%    \item On the fly
-%    \item Redirect to malicious service
-%\end{itemize}
-%
 
-
-\subsection{Encrypted MitM Attack}
+\subsection{MITM Angriff: Encrypted}
 (https, smb, ssh, ...)
 \begin{itemize}
-    \item Intercepting
+    \item Intercepting (Terminate Service $\rightarrow$ CertWarning)
+    \item Downgrade (HTTPS $\rightarrow$ HTTP/ TLS Version Downgrade)
+    \item Replay Angriffe
     \item Redirecting (to third party server, phishing)
 \end{itemize}
 \begin{center}
     \vspace{-8pt}
-    \includegraphics[width=1.0\linewidth]{./img/09-mitm/mitm_enctypt_1}
+    \includegraphics[width=.8\linewidth]{./img/09-mitm/mitm_enctypt_2}
     \vspace{-8pt}
 \end{center}
 \begin{center}
     \vspace{-8pt}
-    \includegraphics[width=1.0\linewidth]{./img/09-mitm/mitm_enctypt_2}
+    \includegraphics[width=.8\linewidth]{./img/09-mitm/mitm_enctypt_3}
     \vspace{-8pt}
 \end{center}
-\begin{center}
-    \vspace{-8pt}
-    \includegraphics[width=1.0\linewidth]{./img/09-mitm/mitm_enctypt_3}
-    \vspace{-8pt}
-\end{center}
-
-%\subsubsection{Verschlüsselte Kommunikation}
-%\begin{enumerate}
-%    \item Terminate Service (Interception) $\rightarrow$ \textit{CertWarning}
-%    \item Downgrade (HTTPS $\rightarrow$ HTTP/ TLS Version Downgrade)
-%    \item Mit unverschlüsseltem Content den verschlüsselten Schwächen
-%    \item Replay Angriffe
-%    \item DoS
-%\end{enumerate}
 
 \subsubsection{MITM HTTPS Attack}
+Intercepting (Terminate Service) führt zu CertWarning!
 
-\subsubsection{MITM SSH Attack}
+\textbf{Offline Phishing}\\
+Es wird versucht, dass der Client direkt seine Credentials dem Attacker liefert, ohne mit dem orginalen Server in kontakt zu treten. Bsp: Phishing Email mit falschem Link zu Fake https Webseite.
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=.8\linewidth]{./img/09-mitm/fake_https_page}
+    \vspace{-8pt}
+\end{center}
+\underline{Mögliche Angriffe:}
+\begin{itemize}
+    \item Fake Site
+    \item Homograph Attack (Ähnliche URL)
+    \item punny code (standardisiertes Kodierungsverfahren zum Umwandeln von Unicode in ASCII)
+\end{itemize}
+\underline{Mitigation}
+\begin{itemize}
+    \item User Awareness Training
+    \item 2FA - Two factor authentication
+    \item Monitoring similar domain registrations as the own domain (dnstwists)
+    \item Being able to block certain websites or domains in case of emergency
+\end{itemize}
+
+\newpage
+
+\textbf{Online Phishing}\\
+Es wird versucht, dass die verbindung zwischen Client und Angreifer ge-downgraded wird (https $\rightarrow$ http).
+% TODO: wieso kann die https verbindung nicht bestehen bleiben und der angreifer das zertifikat "weiterleiten"?
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=.8\linewidth]{./img/09-mitm/http2https}
+    \vspace{-8pt}
+\end{center}
+\underline{Mitigation}
+\begin{itemize}
+    \item NOT 2FA!
+    \item User Awareness Training
+    \item HSTS (http Strict Transport Security)\\
+    $\rightarrow$ HTST Header wird beim 1. Aufruf der Seite auf dem Client gespeichert
+    \item Mutual Authentication (Client Certificates, Server Certificates) \\
+    $\rightarrow$ Client sowie Server senden Zertifikat $\rightarrow$ Angreifer kann Client Zertifikat nicht weiterleiten $\rightarrow$ Check fail auf Server Seite
+    \item FIDO2
+    \item Monitoring similar domain registrations as the own domain (dnstwists)
+    \item Being able to block certain websites or domains in case of emergency
+    \item Certificate Pinning $\rightarrow$ Mobile Apps
+    \item HPKP (HTTP Public Key Pinning) $\rightarrow$ Deaktiviert seit Jan 2021 %TODO ist das was anders? -> siehe handnotizen
+    \item Neu Expect-CT (Expect Certificate Transparency)\\
+    $\rightarrow$ Tells the browser to check the Certificate Transparency (CT) logs to make sure the presented certificate is properly logged.
+\end{itemize}
+
+
+
+\subsubsection{MITM SSH Attack}\\
+Bei MITM mit SSH wird eine Warnung dem User angezeigt, dass der host key nicht matcht!
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=.8\linewidth]{./img/09-mitm/ssh_overview}
+    \vspace{-8pt}
+\end{center}
+
+\textbf{SSH Public Key Authentication}\\
+Verhindert MITM
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=.8\linewidth]{./img/09-mitm/pk_auth}
+    \vspace{-8pt}
+\end{center}
+
+\columnbreak
+
+\textbf{SSH Public Key Authentication}\\
+Verhindert kein MITM!
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=.8\linewidth]{./img/09-mitm/ssh_2fa}
+    \vspace{-8pt}
+\end{center}
+Ist auch möglich mit public key authentication
 
 \subsubsection{MITM RDP Attack}
+\textbf{RDP (Remote Desktop Protocol)}
+\begin{itemize}
+    \item Übertragung von Monitor (Ausgabegerät) vom Remote-Server zum Client
+    \item Übertragung von Tastatur und/oder Maus (Eingabegeräte) vom Client zum Remote-Server
+\end{itemize}
+\textbf{RDP Security}
+\begin{itemize}
+    \item Datenverkehr wird mit RC4 verschlüsselt (= symmetrischer Schlüssel)
+    \item Zufallswerte werden während der Verbindungsaufbau ausgetauscht
+    \item Enhanced Security (Auslagern sämtlicher Sicherheitsoperationen an externes Sicherheitsprotokoll):
+    \begin{itemize}
+        \item TLS
+        \item CredSSP (mit NLA möglich)
+        \item RDSTLS
+    \end{itemize}
+\end{itemize}
+\textbf{RDP Protokoll Stack}
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=1.0\linewidth]{./img/09-mitm/rdp_proto}
+    \vspace{-8pt}
+\end{center}
+\textbf{CredSSP mit NTLM Auth}
+% TODO: how does this work?
 
-\subsubsection{FIDO2}
+\textbf{Fazit Machbarkeitsanalyse}
+\begin{itemize}
+    \item Passwort des Benutzer beim MitM nicht bekannt (Challenge Response Verfahren)
+    \item Randomkey (NTLM) für MitM kann nicht ausgelesen werden
+    \item PubKeyAuth Feld nicht austauschbar
+    \item Fazit: Umgehung NLA Protection nicht möglich
+\end{itemize}
+\textbf{Wie könnte MITM bei RDP und NLA trotzdem funktionieren?}
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=1.0\linewidth]{./img/09-mitm/rdp_works}
+    \vspace{-8pt}
+\end{center}
 
-\subparagraph{MITM}
+\subsubsection{FIDO2 (Fast Identity Online)}
+\begin{itemize}
+    \item Mögliche Lösung für Phishing
+    \item The FIDO2 specification replaces FIDO U2F and FIDO UAF
+\end{itemize}
 
-\subsection{HTTP and HTTPS MitM Apache Reverse Proxy}
+\textbf{Building Blocks}
+\begin{itemize}
+    \item Authenticator\\
+    Yubico, Windows Hello, etc.
+    \item Client\\
+    Browser, Windows, Android
+    \item Relying Party\\
+    Websites
+\end{itemize}
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=1.0\linewidth]{./img/09-mitm/fido2_building_blocks}
+    \vspace{-8pt}
+\end{center}
+
+\textbf{CTAP (Client to Authenticator Protocol)}
+\begin{itemize}
+    \item USB Human Interface Device (USB HID)
+    \item Near Field Communication (NFC)
+    \item Bluetooth Smart / Bluetooth Low Energy Technology
+\end{itemize}
+
+\textbf{WebAuthn}
+\begin{itemize}
+    \item Standardized JavaScript Web API for FIDO2 Authentication
+    \item Implemented by browsers and related web platform infrastructure
+\end{itemize}
+\textbf{Authentication Protocol}
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=1.0\linewidth]{./img/09-mitm/fido2_proto}
+    \vspace{-8pt}
+\end{center}
+
+\textbf{Password-Less Authentication}
+\begin{itemize}
+    \item Fingerprint / PIN entsperren Authenticator
+    \item Authenticator löst Challenge der Webseite auf
+\end{itemize}
+
+\subparagraph{HTTP and HTTPS MitM Apache Reverse Proxy}
+
 This exercise is explaining the so-called online phishing attack. We want to learn how to setup http/https listener, that is forwarding everything to the target webserver. We want to create a \textit{http} and \textit{https} listener and both shall forward to the backend system. The reverse proxy can be used to forward all traffic to another apache instance within the same docker container.
 
 \subsubsection{Explain the benefit of having a http to https reverse proxy in a phishing campaign}
@@ -192,7 +325,7 @@ With DNS/ ARP spoofing, IPV6 Router Advertisements or Neighbour Discovery fakes.
 \subsubsection{Explain how your reverse proxy online phishing could be advertised to a victim over the internet}
 With Routing malfunctioning, Domain takeovers, unsecured public DNS. A good mitigation against these attacks is \textit{DNSSec}.
 
-\subsection{Man in the Middle - SSH}
+\subparagraph{Man in the Middle - SSH}
 The Man-in-the-Middle (MitM) attack is a cyberattack where the attacker secretly relays and possibly alters the communications between two parties who believe that they are directly communicating with each other. This theory is discussing MitM for the ssh protocol.
 
 \subsubsection{Explain why public/ key auth is really preventing MitM}
