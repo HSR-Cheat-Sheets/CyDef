@@ -21,6 +21,8 @@ DKIM, SPF und DMARC sind Standards, die verschiedene Aspekte der E-Mail-Authenti
 \subsection{SPF: Sender Policy Framework}
 Mit SPF können Absender festlegen, welche IP-Adressen E-Mails für eine bestimmte Domäne senden dürfen.
 
+\textit{SPF} ist besonders effizient gegen \textcolor{red}{\textbf{Phishing-Angriffe}}.
+
 \subsubsection{Ablauf}
 Auf dem \textbf{DNS} kann eingegrenzt werden, wer (welche IP) alles ein Mail verschicken darf.
 \textcolor{purple}{\textbf{MTA}} macht \textbf{DNS-Lookup} und fragt diesen an, welche IPs berechtig sind Mails zu versenden.\\
@@ -49,6 +51,8 @@ Wenn SPF verwendet wird, sollte dies im Header/ Log ersichtlich sein!
 \subsection{DKIM: DomainKeys Identified Mail}
 DKIM stellt einen Verschlüsselungsschlüssel und eine digitale Signatur bereit, mit denen überprüft wird, dass eine E-Mail-Nachricht nicht gefälscht oder verändert wurde.
 
+\textit{DKIM} ist besonders effizient gegen \textcolor{red}{\textbf{Man-in-the-middle-Angriffen}}.
+
 \subsubsection{Ablauf}
 \begin{itemize}
     \item Mailserver signiert Mail mit private Key
@@ -73,7 +77,7 @@ Due to the MX of Compass, the \textit{DKIM} service is initialized. But the head
 \end{center}
 
 \subsection{DMARC: (Domain-based Message Authentication, Reporting, and Conformance}
-DMARC vereinheitlicht die Authentifizierungsmechanismen SPF und DKIM in einem gemeinsamen Rahmen und ermöglicht es den Inhabern von Domänen zu definieren, wie E-Mails von dieser Domäne behandelt werden sollen, wenn sie einen Autorisierungstest nicht besteht.
+\textit{DMARC} prüft, ob die SPF sowie DKIM Checks erfüllt werden. Nun können Regeln definiert werden, die bei nicht-bestehen der Checks angewendet werden. Das kann z.B. das rejecten des Mails, in Quarantäne stellen oder das Verschieben in den Spamordner sein.
 
 DMARC is available!
 \begin{center}
