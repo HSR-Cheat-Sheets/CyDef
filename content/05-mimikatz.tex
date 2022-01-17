@@ -65,7 +65,7 @@ Mimikatz kann mit existierenden Prozess und Thread Token interagieren:
     \item Imitieren
 \end{itemize}
 
-\subsubsection{Douple-Hop Problem}
+\subsubsection{Double-Hop Problem}
 Wenn Code mit WMI oder WinRM aus der Ferne ausgeführt wird, erhalten man ein Token, das an eine Network Logon Session gebunden ist $\rightarrow$ Anmeldeinformationen werden nicht tatsächlich an den Remote-Host gesendet.\\
 Von diesem kompromittierten Host aus kann man sich \underline{nicht bei anderen Ressourcen im Netzwerk authentifizieren}!\\
 \textbf{Workaround:}
@@ -108,6 +108,8 @@ Die Interaktion mit dem Speicher von lsass.exe ist der Feind Nr. 1 für Abwehrpr
 \subsubsection{The output}
 Für jede Anmeldesitzung zählt Mimikatz die Anmeldedaten in jedem Authentifizierungspaket auf:\\
 Thread/Process $\rightarrow$ Token $\rightarrow$ Logon Session $\rightarrow$ Auth Package $\rightarrow$ Credential
+
+%TODO: include screenshot
 
 \vfill
 $ $

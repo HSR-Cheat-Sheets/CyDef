@@ -4,55 +4,6 @@
 %! Date = 30. Dez 2021
 %! Project = cydef_summary
 
-\section{Yara}
-YARA ist ein Tool, das Malware-Forschern bei der Identifizierung und Klassifizierung von Malware-Mustern helfen soll (aber nicht darauf beschränkt ist). Mit YARA können Sie Beschreibungen von Malware-Familien (oder was auch immer Sie beschreiben möchten) auf der Grundlage von textuellen oder binären Mustern erstellen. Jede Beschreibung, auch als Regel bezeichnet, besteht aus einer Reihe von Zeichenketten und einem booleschen Ausdruck, die ihre Logik bestimmen
-
-\subsection{Yara and yarGen}
-
-\subsubsection{Awesome Yara}
-\textit{Awesome Yara} is a list of yara rules, tools and resourced inspired by awesome-python and awesome-php.
-
-\subsubsection{yarGen}
-\textit{yarGen} is a generator for YARA rules
-
-The main principle is the creation of yara rules from strings found in malware files while removing all strings that also appear in goodware files. Therefore \textit{yarGen} includes a big goodware strings and opcode database as ZIP archives that have to be extracted before the first use.
-
-\subsection{tcpdump and Yara}
-
-\subsubsection{tcpflow}
-\textit{tcpflow} is a free, open source, powerful command line based tool for analyzing network traffic on Unix-like systems. It captures data received or transferred over TCP connections, and stores it in a file for later analysis, in a useful format that allows for protocol analysis and debugging.
-
-The following command will extract files from the pcap dump to the ./output folder
-\begin{lstlisting}[language=bash]
-    tcpflow -r pcap-file.pcap -o ./output
-\end{lstlisting}
-
-After the extraction, you can see the \textit{md5sum} (hash) of the malware.
-
-\subsubsection{NetworkMiner}
-\textit{NetworkMiner} is an open source Network Forensic Analysis Tool (NFAT). \textit{NetworkMiner} can be used as a passive network sniffer/packet capturing tool in order to detect operating systems, sessions, hostnames, open ports etc. without putting any traffic on the network. \textit{NetworkMiner} can also parse PCAP files for off-line analysis and to regenerate/reassemble transmitted files and certificates from PCAP files.\\
-
-\textit{NetworkMiner} is like tcpflow a tool to extract files from the pcap dump.
-In contrast to tcpflow, \textit{NetworkMiner} is a graphical tool for this.
-
-After the extraction, you can see the \textit{md5sum} (hash) of the malware.
-
-\subsubsection{chaosreader}
-Another method of extracting the file from the pcap is \textit{chaosreader}.\\
-
-A freeware tool to trace TCP/UDP/... sessions and fetch application data from snoop or tcpdump logs. This is a type of \glqq any-snarf\grqq program, as it will fetch telnet sessions, FTP files, HTTP transfers (HTML, GIF, JPEG, ...), SMTP emails, ... from the captured data inside network traffic logs. A html index file is created that links to all the session details, including realtime replay programs for telnet, rlogin, IRC, X11 and VNC sessions; and reports such as image reports and HTTP GET/POST content reports.
-
-\begin{lstlisting}[language=bash]
-    /usr/bin/chaosreader -v pcap-file.pcap
-\end{lstlisting}
-
-\subsubsection{binwalk}
-\textit{Binwalk} is a fast, easy to use tool for analyzing, reverse engineering, and extracting firmware images.
-
-\begin{lstlisting}[language=bash]
-    binwalk -e pcap-file.pcap
-\end{lstlisting}
-
 \subsection{Volatility}
 The \textit{Volatility Framework} is an open source, cross-platform, incident response framework that comes with many useful plugins that provide the investigator with a wealth of information from a snapshot of memory, also known as a memory dump. The concept of volatility has been around for a decade, and apart from analyzing running and hidden processes, it is also a very popular choice for malware analysis.
 
@@ -85,7 +36,7 @@ Let's figure out running processes
     >volatility3 -f ./0zapftis.vmem windows.pslist
 
     Volatility 3 Framework 2.0.0
-    Progress:  100.00		PDB scanning finished                        
+    Progress:  100.00		PDB scanning finished
     PID	PPID	ImageFileName	Offset(V)	Threads	Handles	SessionId	Wow64	CreateTime	ExitTime	File output
 
     4	0	System	0x819cc830	55	162	N/A	False	N/A	N/A	Disabled
@@ -111,7 +62,7 @@ Let's run psscan or windows.pscan
     >volatility3 -f ./0zapftis.vmem windows.psscan
 
     Volatility 3 Framework 2.0.0
-    Progress:  100.00		PDB scanning finished                        
+    Progress:  100.00		PDB scanning finished
     PID	PPID	ImageFileName	Offset	Threads	Handles	SessionId	Wow64	CreateTime	ExitTime	File output
 
     1616	676	alg.exe	0x156c5a0	7	99	0	False	2011-10-10 17:04:01.000000 	N/A	Disabled
@@ -130,7 +81,7 @@ Volatility provides an additional capability for detecting hidden running proces
     Volatility Foundation Volatility Framework 2.6.1
     Offset(P)  Name                    PID pslist psscan thrdproc pspcid csrss session deskthrd ExitTime
     ---------- -------------------- ------ ------ ------ -------- ------ ----- ------- -------- --------
-    0x015a9020 winlogon.exe            632 True   True   True     True   True  True    True     
+    0x015a9020 winlogon.exe            632 True   True   True     True   True  True    True
 \end{lstlisting}
 
 Based on the plugin's output, no hidden processes were found for this memory image. Although some processes may be listed as hidden by the csrss method, they generally are not hidden. Therefore any process marked as hidden (FALSE) by this method requires that another method (pslist, psscan, thrdproc and pspcdid) confirm the suspicion. For Windows 7 and Vista systems, the list of internal processes is not available, and in some cases where Windows XP required memory pages might have been swapped out, the outcome of csrss may be affected.
@@ -150,19 +101,19 @@ The \textit{consoles} plugin is similar to cmdscan, except that it searches for 
     volatility2 -f ./0zapftis.vmem cmdline
     volatility3 -f ./0zapftis.vmem windows.cmdline
 
-    C:\Documents and Settings\Administrator>sc query malwar                         
-    [SC] EnumQueryServicesStatus:OpenService FAILED 1060:                                                                                                    
-    The specified service does not exist as an installed service.                   
-                                                                                                                                                                
-    C:\Documents and Settings\Administrator>sc query malware                                                                                                   
-    SERVICE_NAME: malware                                                           
-            TYPE               : 1  KERNEL_DRIVER                                   
-            STATE              : 4  RUNNING                                         
-                                    (STOPPABLE,NOT_PAUSABLE,IGNORES_SHUTDOWN)       
-            WIN32_EXIT_CODE    : 0  (0x0)                                           
-            SERVICE_EXIT_CODE  : 0  (0x0)                                           
-            CHECKPOINT         : 0x0                                                
-            WAIT_HINT          : 0x0  
+    C:\Documents and Settings\Administrator>sc query malwar
+    [SC] EnumQueryServicesStatus:OpenService FAILED 1060:
+    The specified service does not exist as an installed service.
+
+    C:\Documents and Settings\Administrator>sc query malware
+    SERVICE_NAME: malware
+            TYPE               : 1  KERNEL_DRIVER
+            STATE              : 4  RUNNING
+                                    (STOPPABLE,NOT_PAUSABLE,IGNORES_SHUTDOWN)
+            WIN32_EXIT_CODE    : 0  (0x0)
+            SERVICE_EXIT_CODE  : 0  (0x0)
+            CHECKPOINT         : 0x0
+            WAIT_HINT          : 0x0
 \end{lstlisting}
 
 Based on the output of these two plugins, some individual, either locally or remotely, queried the system for some service named malware. This service was found to be running and was found to be a kernel-based driver.
