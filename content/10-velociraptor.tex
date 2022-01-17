@@ -5,11 +5,42 @@
 %! Project = cydef_summary
 
 \section{Velociraptor}
+Use Velociraptor to collect evidence, hunt for IOCs or just to monitor for something to happen. For that purpose, there are different kinds of client and server artifacts (scripts to collect stuff) some general and some that trigger on events which you could use for
+monitoring.\\
+
 Velociraptor is a free and open-source software project developed by the Velocidex Company. Velociraptor is generally based on GRR, OSQuery, and Google's Rekall tools. Velociraptor allows users to collect Forensics Evidence, Threat Hunting, Monitoring artifacts, Executing remote triage process. As an open-source platform, Velociraptor continues to improve and evolve through inputs and feedback of digital forensics investigation and cybersecurity practitioner
 
 Velociraptor was released in 2019 and allows for hunting across many thousands of machines. Inspired by OSQuery, Velociraptor implements a new query language dubbed \textit{VQL} (Velociraptor Query Language) which is similar to SQL but extends the query language in a more powerful way. Velociraptor also emphasizes ease of installation and very low latency - typically collecting artifacts from thousands of endpoints in a matter of seconds.
 
 \subsection{Introduction}
+
+\subsubsection{Terminology}
+\begin{itemize}
+    \item \textbf{File}
+    \begin{itemize}
+        \item  File system access based on OS FS API
+    \end{itemize}
+    \item \textbf{NTFS}
+    \begin{itemize}
+        \item NTFS raw parsing filesystem access
+    \end{itemize}
+    \item \textbf{Registry}
+    \begin{itemize}
+        \item Windows Registry access using the Registry API
+    \end{itemize}
+    \item \textbf{Artifacts}
+    \begin{itemize}
+        \item Artifacts collected from the client incl. type and time in Velociraptor Artifacts are commands and scripts that actually grab some data (we usually call these artifacts) from clients. Structured in YAML
+    \end{itemize}
+    \item \textbf{VQL}
+    \begin{itemize}
+        \item Velociraptor Query Language
+    \end{itemize}
+    \item \textbf{Hunting}
+    \begin{itemize}
+        \item enables you to collect the same artifacts over an entire fleet
+    \end{itemize}
+\end{itemize}
 
 \subsubsection{Virtual File System (VFS)}
 \begin{itemize}
@@ -20,6 +51,8 @@ Velociraptor was released in 2019 and allows for hunting across many thousands o
     in Velociraptor Artifacts are commands and scripts that actually
     grab some data (we usually call these artifacts) from clients.
 \end{itemize}
+
+\columnbreak
 
 \subsubsection{Velociraptor Hunts}
 Hunting enables you to collect the same artifacts over an entire fleet. For example execute a powershell script and collect stdout.

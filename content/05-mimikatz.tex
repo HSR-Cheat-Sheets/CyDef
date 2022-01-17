@@ -45,13 +45,13 @@ ein Prozess-Token (Sicherheitskontext des mit dem Prozess verbundenen Benutzerko
 ein Thread-Token (um andere Token in Client/Server-Szenarien zu verkörpern)\\
 \textbf{Impersonating Levels}:
 \begin{itemize}
-    \item Anonymous\\
+    \item \textbf{Anonymous}\\
     Entfernter Server kann einen Client nicht identifizieren, der Thread agiert als anonymer Benutzer.
-    \item Identification\\
+    \item \textbf{Identification}\\
     Entfernte Server kann den Benutzer identifizieren, aber nicht ,,impersonaten``
-    \item Impersonation\\
+    \item \textbf{Impersonation}\\
     Der entfernte Server kann den Client über eine Computergrenze hinweg identifizieren und sich als dieser ausgeben (Netzwerkanmeldung beim Server)
-    \item Delegation\\
+    \item \textbf{Delegation}\\
     Der Server kann sich über mehrere Grenzen hinweg als Client ausgeben und Anrufe im Namen des Clients tätigen (bekannt als Kerberos ,,double hop``)
 \end{itemize}
 \textbf{Bemerkung:}
@@ -65,9 +65,9 @@ Mimikatz kann mit existierenden Prozess und Thread Token interagieren:
     \item Imitieren
 \end{itemize}
 
-\subsubsection{Douple-Hop Problem}
+\subsubsection{Double-Hop Problem}
 Wenn Code mit WMI oder WinRM aus der Ferne ausgeführt wird, erhalten man ein Token, das an eine Network Logon Session gebunden ist $\rightarrow$ Anmeldeinformationen werden nicht tatsächlich an den Remote-Host gesendet.\\
-Von diesem kompromittierten Host aus kann man sich \underline{nicht bei anderen Ressourcen im Netzwerk authentifizieren}!\\
+Von diesem kompromittierten Host aus kann man sich \underline{nicht bei anderen Ressourcen im Netzwerk} \underline{authentifizieren}!\\
 \textbf{Workaround:}
 \begin{itemize}
     \item Anderes Token verwenden, das auf eine Non-Network Logon Session verweist:
@@ -80,6 +80,9 @@ Von diesem kompromittierten Host aus kann man sich \underline{nicht bei anderen 
 \end{itemize}
 
 \subsection{Mimikatz}
+\textit{Mimikatz} kann nicht verwendet werden um lokaler Admin zu werden, sondern um sich danach weiter Zugriff auf dem System zu verschaffen.
+
+Als lokaler Admin versucht \textit{Mimikatz} Domain-Admin Credentials auszulesen, welche lokal gespeichert/ gecached sind.
 
 \subsubsection{Übersicht}
 \begin{itemize}
@@ -108,6 +111,22 @@ Die Interaktion mit dem Speicher von lsass.exe ist der Feind Nr. 1 für Abwehrpr
 \subsubsection{The output}
 Für jede Anmeldesitzung zählt Mimikatz die Anmeldedaten in jedem Authentifizierungspaket auf:\\
 Thread/Process $\rightarrow$ Token $\rightarrow$ Logon Session $\rightarrow$ Auth Package $\rightarrow$ Credential
+
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=1.0\linewidth]{./img/05-mimikatz/mimikatz_output}
+\end{center}
+
+\subsubsection{Mimikatz Countermeasures Recap}
+Die Anmeldedaten müssen auf Windows-Rechnern gespeichert werden, um Single-Sign-On zu ermöglichen. Dies birgt das Risiko, dass zwischengespeicherte Anmeldeinformationen gestohlen werden. Sie können dieses Risiko jedoch mindern, indem
+\begin{itemize}
+    \item Keine Wiederverwendung von Passwörtern, Verwendung sicherer Passwörter und Schutz von Hashes
+    \item Anmeldebeschränkungen implementieren für privilegierte Accounts, um die Gefährdung zu begrenzen.
+    \item Bereitstellen eines Active Directory-Verwaltungsschichtmodells
+    \item Gruppe der protected Users in Windows AD verwenden
+    \item Empfehlungen zur Entschärfung von Pass-the-Hash-Angriffen anwenden
+    \item Credential Guard bereitstellen
+\end{itemize}
 
 \vfill
 $ $
@@ -156,6 +175,8 @@ Aus dem Passwort eines Benutzers wird ein "Vorschlüssel" abgeleitet, der dann z
     \vspace{-8pt}
 \end{center}
 
+\columnbreak
+
 \subsubsection{decrypt User Secrets}
 DPAPI-Benutzer-Masterkeys befinden sich im LSASS-Speicher für angemeldete Benutzer. Im Kontext eines Benutzers ist die einfachste Entschlüsselungsmethode für viele (aber nicht alle) DPAPI Blobs, CryptUnprotectData() aufzurufen, damit das Betriebssystem den Blob entschlüsselt.
 
@@ -187,7 +208,7 @@ Neben anderen Verbesserungen zur Verringerung des Risikos von Pass-the-Hash-Angr
     \item Verwendung von sicheren Passwörtern und Schutz von Hashes
     \item Implementieren Sie Anmeldebeschränkungen für Ihre privilegierten Konten, um die Gefährdung zu begrenzen
     \item Implementieren Sie ein Active Directory-Verwaltungsschichtmodell
-    \item Nutzen Sie die Gruppe "Geschützte Benutzer" in Windows AD
+    \item Nutzen Sie die Gruppe ''Geschützte Benutzer'' in Windows AD
 \end{itemize}
 
 
@@ -210,6 +231,8 @@ Pass the hash (PtH) is a method of authenticating as a user without having acces
 
 \subsubsection{Pass-the-Ticket attack}
 \textit{Pass-the-ticket} attacks target Kerberos in a similar way to golden ticket and silver ticket attack. However, in \textit{pass-the-ticket} attacks, an attacker does not forge Kerberos tickets. Instead, they steal valid tickets that have already been created and issued and pass them from one system to another to access resources as a legitimate, privileged user.
+
+\columnbreak
 
 \subsubsection{Over-Pass-the-Hash (Pass-the-Key) attack}
 The \textit{overpass-the-hash} attack works similarly to the pass-the-hash attack, but takes this technique one step further to obtain a valid Kerberos ticket.
@@ -293,6 +316,8 @@ This activity can be detected by focussing on any sysmon events that have the ev
 
 \subsubsection{Would it be possible to flag the mimikatz detection as alarm in the Event Viewer?}
 According to my research, I have not found anything where Event Viewer alerts can be created via sysmon. All detections from sysmon are displayed in the Event Viewer as \textit{Information}\color{black} and the critical messages can then be filtered via the \textit{event ID}.
+
+\columnbreak
 
 \subsubsection{Explain the idea of sigma rules}
 Sigma Rules are a generic and open signature format that allows to describe relevant log events in a straight forward manner. The rule format is very flexible, easy to write and applicable to any type of log file. The main purpose of sigma rules is to provide a structured form in which researchers or analysts can describe their once developed detection methods and make them shareable with others.

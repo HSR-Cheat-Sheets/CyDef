@@ -6,7 +6,6 @@
 
 
 \section{Windows Logs}
-%TODO: update whole content
 
 \subsection{TLP (Traffic Light Protocol)}
 \begin{itemize}
@@ -44,15 +43,16 @@
 \subsubsection{Security.evtx - Account Monitoring}
 \textbf{Event IDs}
 \begin{itemize}
-    \item 4720 - Account Creation
-    \item 4624 - Successful Logon
-    \item 4625 - Failed Logon
-    \item 4624/ 4647/ 4634 - Successful Logoff
-    \item 4738 - A user account was changed (permissions granted or similar)
-    \item 4648 - Logon with explicit credentials
-    \item 4776 - Local account authentication (NTLM authentication)
-    \item 4672 - Special privileges assigned to new logon
-    \item 4779 - A user disconnected a terminal server session without logging off
+    \item \textbf{4624} - Successful Logon
+    \item \textbf{4624/ 4647/ 4634} - Successful Logoff
+    \item \textbf{4625} - Failed Logon
+    \item \textbf{4648} - Logon with explicit credentials
+    \item \textbf{4672} - Special privileges assigned to new logon
+    \item \textbf{4688} - show any processes created by anybody including malware and attackers
+    \item \textbf{4720} - Account Creation
+    \item \textbf{4738} - A user account was changed (permissions granted or similar)
+    \item \textbf{4776} - Local account authentication (NTLM authentication)
+    \item \textbf{4779} - A user disconnected a terminal server session without logging off
 \end{itemize}
 
 \subsubsection{Logon Type}
@@ -118,6 +118,17 @@ Wenn \textit{lsass.exe} beendet wird, wird der Benutzer von Windows abgemeldet.
 
 Dabei werden die Events aus dem EventLog an Wazu weitergeleitet und es kann somit auch nach der \textit{EventID} gefiltert werden.
 
+\subparagraph{Windows Logs}
+
+\subsubsection{RDP event ID's in domain controller event log?}
+Die Logs befinden sich je auf dem RDP Server unter TerminalServices-LocalSessionManager.
+Diese Logs werden aktuell jedoch vom Wazuh Agent (noch) nicht an Wazuh geleitet. Daher erscheinen diese auch nicht in Wazuh. 
+
+\subsubsection{RDP event ID's in Wazuh?}
+Yes, the Wazuh agents did report/log the RDP event IDs. The event were shown on the Wazuh Web Dashboard.
+
+\columnbreak
+
 \subsubsection{EventID 1149}
 Successful network authentication (successfully executed an RDP network connection).
 
@@ -126,27 +137,22 @@ Event 1149 is logged when there is a successful RDP logon to the computer. Befor
 But, that has changed, and all modern OS versions will only log 1149 if the username in the event was successfully authenticated. It also includes the IP address of the source of the connection, which is useful information. If an account is used and successfully authenticates but does not have permission to RDP to the computer due to other restrictions, event 1149 is not generated.
 
 \subsubsection{Phases of RDP-Connection}
-
-\begin{minipage}{0.45\linewidth}
-    \begin{enumerate}
-        \item Connection Initiation
-        \item Basic Settings Exchange
-        \item Channel Connection
-        \item RDP Security Commencement
-        \item Secure Settings Exchange
-        \item Optional Connect-Time Auto-Detection
-        \item Licensing
-        \item Optional Multitransport Bootstrapping
-        \item Capabilities Exchange
-        \item Connection Finalization
-    \end{enumerate}
-\end{minipage}
-\begin{minipage}{0.5\linewidth}
-    \begin{center}
-        \includegraphics[width=1.2\linewidth]{./img/04-windows_logs/rdp_phases}
-        \vspace{-8pt}
-    \end{center}
-\end{minipage}
+\begin{enumerate}
+    \item Connection Initiation
+    \item Basic Settings Exchange
+    \item Channel Connection
+    \item RDP Security Commencement
+    \item Secure Settings Exchange
+    \item Optional Connect-Time Auto-Detection
+    \item Licensing
+    \item Optional Multitransport Bootstrapping
+    \item Capabilities Exchange
+    \item Connection Finalization
+\end{enumerate}
+\begin{center}
+    \includegraphics[width=1.0\linewidth]{./img/04-windows_logs/rdp_phases}
+     \vspace{-8pt}
+\end{center}
 
 \subsubsection{Explain how you filtered every RDP login attempt}
 The TerminalServices-RemoteConnectionManager Log is not forwarded to Wazuh.\\
@@ -164,3 +170,18 @@ Um erfolglose RDP Login Versuche im Event Viewer zu suchen, sucht man nach der \
     \item \lstinline|data.win.eventdata.logonType = 3| or \lstinline|data.win.eventdata.logonType = 10|
     \item \lstinline|data.win.system.eventID = 4625| and \lstinline|data.win.eventdata.logonType = 3|
 \end{itemize}
+
+\subparagraph{Wazuh}
+
+\subsubsection{Wazuh Agent}
+The \textit{Wazuh agent} runs on monitored systems and is responsible for collecting log and event data, performing policy monitoring scans, detecting malware and rootkits and triggering alerts when monitored files are modified. It communicates with the Wazuh server through an encrypted and authenticated channel.
+
+\subsubsection{Wazuh Manager}
+\textit{Wazuh Manager} is the management console for Wazuh. It provides a UI for the collected data from Elasticsearch and Kibana.
+
+\subsubsection{Does Wazuh agent forward plain logs from host it runs or the built-in Windows Events if agents installed on Windows computer}
+Yes, the \textit{Wazuh agent} is forwarding both types of log files. The agent can e.g. collect logs from Windows EventViewer and additional special software and forward them accordingly.
+
+\subsubsection{Wazuh Filters}
+\textit{Wazuh Filters} can be used to filter the collected (already existing) logs from Elasticsearch to show only the needed and relevant logs. Since Elasticsearch indexes a lot of data, it quickly becomes confusing without filters.
+In contrast, \textit{Wazuh Rules} can be applied to new (incoming) logs and generate an alarm, for example.

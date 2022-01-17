@@ -8,7 +8,7 @@
 
 \subsection{SIEM: Security Information and Event Management}\label{subsec:siem}
 Sicherheitsinformationen und Ereignisverwaltung aus verschiedenen Quellen (Netzwerk, Servern, Anwendungen, \ldots) in Echtzeit aggregieren, identifizieren, kategorisieren und analysieren.\\
-Sicherheitsprobleme sollten automatisch erkannt und eine Warnung versenden werden.
+Sicherheitsprobleme sollten automatisch erkannt und eine Warnung versendet werden.
 \subsubsection{Vorteile}
 \begin{itemize}
     \item Ermöglicht die Mustersuche in Protokolldaten nach Indikatoren für einen Cyberangriff (IOC)
@@ -65,7 +65,7 @@ $ $
 
 
 \subsection{EDR: Endpoint Protection and Response}\label{subsec:edr}
-Endpoint Detection and Response (EDR), auch bekannt als Endpoint Threat Detection and Response (ETDR), ist eine integrierte Endpunkt-Sicherheitslösung, die eine kontinuierliche Überwachung und Erfassung von Endpunktdaten in Echtzeit mit regelbasierten automatischen Reaktions- und Analysefunktionen
+Endpoint Detection and Response (EDR), auch bekannt als Endpoint Threat Detection and Response (ETDR), ist eine integrierte Endpunkt-Sicherheitslösung, die eine kontinuierliche Überwachung und Erfassung von Endpunktdaten in Echtzeit mit regelbasierten automatischen Reaktions- und Analysefunktionen.
 EDR wird direkt auf dem Client installiert, SOAR auf einem Server im Netzwerk. Kann mit einem Antivirus Programm verglichen werden.
 
 \subsubsection{Vorteile}
@@ -89,8 +89,6 @@ EDR wird direkt auf dem Client installiert, SOAR auf einem Server im Netzwerk. K
 
 
 \subsection{CERT: Computer Emergency Response Team}
-% TODO: More Information?
-% https://www.techtarget.com/searchsecurity/tip/CERT-vs-CSIRT-vs-SOC-Whats-the-difference
 Das CERT ist eine Gruppe von IT-Sicherheitsfachleuten, die sowohl präventive als auch reaktive Maßnahmen bei sicherheitsrelevanten Vorfällen in Computer-Systemen empfiehlt.
 Sie wirken an der Lösung von konkreten Sicherheitsvorfällen mit, liefern Lösungsansätze oder warnen vor Sicherheitslücken.
 Eine andere Bezeichnung für Computer Emergency Response Team ist CSIRT (Computer Security Incident Response Team).
@@ -128,6 +126,7 @@ Der Aufgabenbereich eines SOC kann sowohl Incident Response (ganz oder teilweise
 
 \subsection{IOC: Indices of Compromize}
 Indicators of Compromise (IOCs) definieren die Merkmale eines Vorfalls auf strukturierte Weise. Sie haben das Ziel, Artefakte im Zusammenhang mit Vorfällen zu beschreiben und zu finden.
+
 \textbf{Format:}
 \begin{itemize}
     \item Host-basierte IOC-Formate (noch kein akzeptierter Standard)
@@ -143,7 +142,7 @@ Indicators of Compromise (IOCs) definieren die Merkmale eines Vorfalls auf struk
 \end{itemize}
 
 \subsection{Incident Response}
-% TODO: Include content here or somwhere else?
+% TODO: Include content here or somwhere else? -> ref zu incident response
 % NIST
 % SANS
 
@@ -152,11 +151,12 @@ Indicators of Compromise (IOCs) definieren die Merkmale eines Vorfalls auf struk
     \includegraphics[width=1.0\linewidth]{./img/02-begriffe/nist_sans}
 \end{center}
 
-
+\columnbreak
 
 \subsubsection{Sigma}
 Sigma ist ein generisches und offenes Signaturformat, mit dem Sie relevante Protokollereignisse auf einfache Weise beschreiben können. Das Regelformat ist sehr flexibel, leicht zu schreiben und auf jede Art von Protokolldateien anwendbar. Das Hauptziel dieses Projekts ist es, eine strukturierte Form bereitzustellen, in der Forscher oder Analysten ihre einmal entwickelten Erkennungsmethoden beschreiben und mit anderen teilen können.\\
 \textit{Sigma} ist für Logs das, was Snort für den Netzwerkverkehr und YARA für Dateien ist.\\
+
 \textbf{Use-Cases}
 \begin{itemize}
     \item Describe your detection method in Sigma to make it shareable
@@ -166,3 +166,8 @@ Sigma ist ein generisches und offenes Signaturformat, mit dem Sie relevante Prot
     \item Share the signature in threat intel communities - e.g. via MISP
     \item Provide Sigma signatures for malicious behaviour in your own application
 \end{itemize}
+
+
+
+%TODO Include Lab solution
+% Wo soll Lab "Wazuh Introduction" hin? -> akutell in Windows Logs^^

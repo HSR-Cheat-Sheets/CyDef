@@ -23,7 +23,7 @@
 \end{center}
 \vspace{-8pt}
 
-\subsection{Wie wird MITM erreicht}
+\subsection{Wie wird MITM erreicht (becoming MitM)}
 
 \subsubsection{Control Device: 2G, 3G, 4G}
 IMSI Catcher wird von den Behörden eingesetzt um eine weitere GSM Antenne dazwischen zu schalten.
@@ -70,7 +70,7 @@ Neue Route ,,vorgaukeln`` mit tieferer metric, sodass die anderen Verbindungen g
 \end{center}
 Traffic von Switch 2 geht über AttackerPC.
 
-\subsubsection{Device Spoofing: ARP}
+\subsubsection{Device Spoofing: ARP Spoofing}
 Falsche Auflösung von IP zu MAC-Addresse wird im Netzwerk verteilt. MITM kann ganzer Traffic mitlesen und routen richtig auflösen, sodass es immer noch funktioniert.
 \begin{center}
     \vspace{-4pt}
@@ -79,7 +79,7 @@ Falsche Auflösung von IP zu MAC-Addresse wird im Netzwerk verteilt. MITM kann g
 \end{center}
 \vspace{-8pt}
 
-\subsubsection{Device Spoofing: DHCP}
+\subsubsection{Device Spoofing: DHCP poisoning}
 Angreifer besitzt einen DHCP Server, welcher schneller Antworten muss, als der Originale.
 \begin{center}
     \vspace{-8pt}
@@ -113,7 +113,7 @@ Client erhlt einen URL vom Angreifer. Dieser sieht vertrauenswürdig aus. Schlus
 (dns, http, dhcp, telnet, arp, snmp, smtp)
 \begin{itemize}
     \item Passive (Read traffic)
-    \item Intercepting (Terminate Service)
+    \item Intercepting (Terminate Service, Manipulate Data, Drop (DoS))
     \item Redirecting (to third party server, phishing)
 \end{itemize}
 MITM kann alle Daten direkt mitlesen, verändern, umleiten oder blockieren!
@@ -123,12 +123,18 @@ MITM kann alle Daten direkt mitlesen, verändern, umleiten oder blockieren!
     \vspace{-8pt}
 \end{center}
 
+\textbf{Strategien}:
+\begin{itemize}
+    \item On the fly
+    \item Redirect to malicious service
+\end{itemize}
 
 \subsection{MITM Angriff: Encrypted}
 (https, smb, ssh, ...)
 \begin{itemize}
-    \item Intercepting (Terminate Service $\rightarrow$ CertWarning)
+    \item Intercepting (Terminate Service $\rightarrow$ CertWarning/ DoS)
     \item Downgrade (HTTPS $\rightarrow$ HTTP/ TLS Version Downgrade)
+    \item Mit unverschlüsseltem Content den verschlüsselten Schwächen
     \item Replay Angriffe
     \item Redirecting (to third party server, phishing)
 \end{itemize}
@@ -166,8 +172,6 @@ Es wird versucht, dass der Client direkt seine Credentials dem Attacker liefert,
     \item Monitoring similar domain registrations as the own domain (dnstwists)
     \item Being able to block certain websites or domains in case of emergency
 \end{itemize}
-
-\newpage
 
 \textbf{Online Phishing}\\
 Es wird versucht, dass die verbindung zwischen Client und Angreifer ge-downgraded wird (https $\rightarrow$ http).
@@ -244,8 +248,8 @@ Ist auch möglich mit public key authentication
     \includegraphics[width=1.0\linewidth]{./img/09-mitm/rdp_proto}
     \vspace{-8pt}
 \end{center}
-\textbf{CredSSP mit NTLM Auth}
-% TODO: how does this work?
+\textbf{CredSSP mit NTLM Auth}\\
+$\rightarrow$ Siehe: \ref{subsubsec:cred-ssp}
 
 \textbf{Fazit Machbarkeitsanalyse}
 \begin{itemize}
@@ -269,12 +273,18 @@ Ist auch möglich mit public key authentication
 
 \textbf{Building Blocks}
 \begin{itemize}
-    \item Authenticator\\
-    Yubico, Windows Hello, etc.
-    \item Client\\
-    Browser, Windows, Android
-    \item Relying Party\\
-    Websites
+    \item \textit{Authenticator}
+    \begin{itemize}
+        \item Yubico, Windows Hello, etc.
+    \end{itemize}
+    \item \textit{Client}
+    \begin{itemize}
+        \item Browser, Windows, Android
+    \end{itemize}
+    \item \textit{Relying Party}
+    \begin{itemize}
+        \item Websites (Apple, Google, GitHub)\\
+    \end{itemize}
 \end{itemize}
 \begin{center}
     \vspace{-8pt}
@@ -286,15 +296,16 @@ Ist auch möglich mit public key authentication
 \begin{itemize}
     \item USB Human Interface Device (USB HID)
     \item Near Field Communication (NFC)
-    \item Bluetooth Smart / Bluetooth Low Energy Technology
+    \item Bluetooth Smart / Bluetooth Low Energy Technology\\
 \end{itemize}
 
 \textbf{WebAuthn}
 \begin{itemize}
     \item Standardized JavaScript Web API for FIDO2 Authentication
-    \item Implemented by browsers and related web platform infrastructure
+    \item Implemented by browsers and related web platform infrastructure\\
 \end{itemize}
-\textbf{Authentication Protocol}
+
+\textbf{Authentication Protocol}\\
 \begin{center}
     \vspace{-8pt}
     \includegraphics[width=1.0\linewidth]{./img/09-mitm/fido2_proto}
@@ -304,7 +315,16 @@ Ist auch möglich mit public key authentication
 \textbf{Password-Less Authentication}
 \begin{itemize}
     \item Fingerprint / PIN entsperren Authenticator
-    \item Authenticator löst Challenge der Webseite auf
+    \item with Pin and biometric unlo ck authenticator $\rightarrow$ authenticator then unlo cks the rest
+    \item Authenticator löst Challenge der Webseite auf\\
+\end{itemize}
+
+\textbf{Conclusion}:\\
+Traditional authentication mechanisms are not sufficient anymore $\rightarrow$ inconvenient and not resistant to phishing $\rightarrow$ \textbf{FIDO2}
+\begin{itemize}
+    \item phsishing resistant authentication protocol
+    \item simple to use
+    \item has strong platform \& industry support
 \end{itemize}
 
 \subparagraph{HTTP and HTTPS MitM Apache Reverse Proxy}
@@ -348,11 +368,17 @@ The user is identified on the target system by the public key id. The identity i
 
 \subsubsection{Explain NLA}
 \textit{NLA} (Network Level Authentication) is an authentication tool used in Remote Desktop Services or Remote Desktop Connection.
-\textit{NLA} moves the authentication aspect of a remote session from the RDP layer to the network layer. The use of \textit{NLA} is recommended to reduce the attack surface of systems exposed to the RDP protocol.
+\textit{NLA} moves the authentication aspect of a remote session from the RDP layer to the network layer. The use of \textit{NLA} is recommended to reduce the attack surface of systems exposed to the RDP protocol.\\
 
-\textit{NLA} only works with \textbf{challenge-response-authentication protocols}.
+User müssen sich Authentisieren bevor eine RDP Session und ihr Login dann gemacht wird.
+Original wurde bei einem RDP Login gleich eine Verbindung auf die Shell/UI geöffnet, heute aber zuerst PW prompt (wie man es auch kennt).
+Bevor man auf der Maschine ist, holt man ein Kerberos Ticket ab $\rightarrow$ CredSSP-Authentication via TLS mit Certs oder/und Kerberos. 
 
-\subsubsection{Explain CredSSP}
+NLA mit NTLM ist nicht wirklich sehr sicher, lieber mit TLS oder Kerberos.\\
+
+\textit{NLA} only works with \textcolor{red}{\textbf{challenge-response-authentication protocols}}.
+
+\subsubsection{Explain CredSSP}\label{subsubsec:cred-ssp}
 Credential Security Support Provider (\textit{CredSSP}) allows credentials to be forwarded to a remote host, where they are then used for authentication. Well-known applications that use this method are the RDP client or PowerShell. For the latter, \textit{CredSSP} can solve the second-hop problem when connecting to another remote host from a remote session.
 
 \subsubsection{RDP MitM}
@@ -360,7 +386,7 @@ Credential Security Support Provider (\textit{CredSSP}) allows credentials to be
     \includegraphics[width=1.0\linewidth]{rdp_mitm}
 \end{center}
 
-\textbf{Dies geht aber nur bei \textit{Challenge-Response} Verfahren!!}\\
+\textcolor{red}{\textbf{Dies geht aber nur bei \textit{Challenge-Response} Verfahren!!}}\\
 $\rightarrow$ sobald Passwort übers Netz übermittelt wird, würde MitM wieder funktionieren
 
 \subsubsection{Explain why NLA should protect against MitM}
@@ -368,31 +394,43 @@ If a client wants to establish an RDP connection to a terminal server (TS), a Mi
 
 Finally the TS sends a challenge to the client (via the MitM). The client now encrypts the hash of the user (\textit{Hash via username + password}) together with the received \textit{cert of the MitM}. The client now sends this response to the MitM. The MitM would have to modify this response so that the encryption is done with the \textit{TS-Cert} and no longer with the \textit{MitM-Cert}. Since passwords are never sent over the network in the challenge response, the MitM can't modify this response as necessary. Thus the RDP connection between the MitM and the server cannot be established.
 
+Antwort an den Server beim Authentifizieren, verschlüsselt der Client das Server-Zertifikat gleich mit um es zurückzuschicken.
+Da aber bei einem Angriff der Client das Cert des MitM Proxies bekommen hat, stimmt das nicht $\rightarrow$ man bemerkt MitM Attack und kann sich so nicht anmelden. 
+PW zum verschlüsseln dieses Pakets (User PW im AD abgelegt) ging bis dahin gar nicht über das Netzwerk, sodass der Proxy das Paket nicht aufbrechen und verändern kann
+$\rightarrow$ \textbf{Mit User AD-PW beim anmelden an RDP Server das bekommene Cert des RDP Server mitverschlüsseln}
+
 \subsubsection{Would 2FA fix the problem of this kind of MitM attack?}
 \textit{2FA} brings no advantage with \textit{MitM}, because if the 2nd factor is confirmed (which the MitM does not intercept), the connection is ultimately established via the MitM anyway. Since MitM attacks are no longer possible with NLA, 2FA is not necessary to minimize this attack.
 
 \textit{2FA} will not fix the fundamental problem of \textit{MitM}, but the attacker can only hijack the victim if the victim is logging into the target server via \textit{MitM}. Mutual Auth would really solve the issue!
 
 \subsubsection{Challenge-Response}
+Man meldet sich an einem System an, der Server schickt eine \textit{Nonce} die man in einem \textit{HMAC} Hash mit dem PW verarbeitet und so übermittelt.
+So wird \textbf{nie} der Hash alleine oder das PW in Plaintext geschickt. 
+Bei diesem Ansatz muss der Server aber das PW gehasht oder als Plaintext kennen, da er den \textit{HMAC} Hash zum überprüfen ja auch generieren muss.\\
+\textbf{Schwachstelle}: Server mit PW Datenbank!\\
+
 \textcolor{red}{\textbf{Passwort geht nie übers Netz (nur der Hash des Passwortes)}}\\
 
-\begin{minipage}{0.45\linewidth}
-    \begin{enumerate}
-        \item Client $\rightarrow$ Server: \textit{Anfrage}
-        \item Server $\rightarrow$ Client: \textit{generiert Challenge}
-        \item Client $\rightarrow$ Server: \textit{generiert Response auf Challenge (mit dem Hash seines Passwortes)}
-        \item Server $\rightarrow$ Client: \textit{Server prüft Response auf eigene Antwort auf Challenge anhand selber generierter Response mit gespeichertem Hash des PWs}
-    \end{enumerate}
-\end{minipage}
-\begin{minipage}{0.5\linewidth}
-    \begin{center}
-        \includegraphics[width=1.0\linewidth]{challenge_response}
-        \vspace{-8pt}
-    \end{center}
-\end{minipage}
+\begin{enumerate}
+    \item Client $\rightarrow$ Server: \textit{Anfrage}
+    \item Server $\rightarrow$ Client: \textit{generiert Challenge}
+    \item Client $\rightarrow$ Server: \textit{generiert Response auf Challenge (mit dem Hash seines Passwortes)}
+    \item Server $\rightarrow$ Client: \textit{Server prüft Response auf eigene Antwort auf Challenge anhand selber generierter Response mit gespeichertem Hash des PWs}
+\end{enumerate}
+\begin{center}
+    \includegraphics[width=1.0\linewidth]{./img/09-mitm/challenge_response}
+    \vspace{-8pt}
+\end{center}
 
 \subsubsection{Mutual Authentication}
-tbd
+\textit{Mutual Auth} bezieht sich immer darauf, dass sich beide Seiten mit einem Certificate ausweisen.
+
+\textit{Simpler Ansatz}: Der User hat ein Private/Public Key, der Public Key wird mit sicherem Wege an den Server geleitet. So weiss nun der Server, okay - jemand mit dem Private key und der auch noch die Message signieren kann mit seinem Private Key wird wohl der sein der er angibt zu sein.\\
+\begin{itemize}
+    \item Sicherste Methode, vorallem auch bei SSH Authentication
+    \item wenn das in beiden Richtungen mit dem Signieren gemacht wird, dann ist es wie bei Challenge Response, aber in gut
+\end{itemize}
 
 \subsubsection{What is the difference between the two nmap outputs in the steps above (enabled/disabled NLA)}
 As you can see below with \textbf{enabled NLA} the nmap output shows \textit{no SSL} (but RDSTLS), in contrast to \textbf{disabled NLA} where SSL is displayed as enabled (in addition to \textit{RDSTLS}).

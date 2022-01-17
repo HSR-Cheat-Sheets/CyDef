@@ -38,7 +38,7 @@
     \item Logische Unterteilungen: Forest, tree \& domain
     \item Active Directory speichert
     \begin{itemize}
-        \item password hash of every user $\rightarrow$ \textbf{Target for attackers!!!}
+        \item password hash of every user\\ $\rightarrow$ \textcolor{red}{\textbf{Target for attackers!!!}}
         \item computer hash of every computer
     \end{itemize}
 \end{itemize}
@@ -90,17 +90,17 @@ Eine access control list (ACL) ist eine Liste von access control entries (ACE). 
 
 \subsubsection{Administrators}
 \begin{itemize}
-    \item BUILTIN \textbackslash Administrators\\
+    \item \textbf{BUILTIN \textbackslash Administrators}\\
     Lokaler Admin-Zugang auf einem Domänencontroller
-    \item Domain Admins\\
+    \item \textbf{Domain Admins}\\
     Administrativer Zugriff auf alle Ressourcen in der zugehörigen Domäne.
-    \item Enterprise Admins\\
+    \item \textbf{Enterprise Admins}\\
     Existiert nur in der Forest Root. Wird implizit zu ,,Domain Admins`` jeder untergeordneten Domain hinzugefügt.
-    \item Schema Admins\\
+    \item \textbf{Schema Admins}\\
     Kann das Domänen-/Forstschema ändern.
-    \item Server Operators\
+    \item \textbf{Server Operators}\
     Kann Domänenserver verwalten.
-    \item Account Operators\\
+    \item \textbf{Account Operators}\\
     Kann jeden Benutzer verwalten, der nicht zu einer ,,privilegierten`` Gruppe gehört.
 \end{itemize}
 
@@ -216,23 +216,22 @@ Ping Castle ist ein Tool zur schnellen Bewertung des Sicherheitsniveaus von Acti
     \item Select Location of script
 \end{itemize}
 
-\subsection{Kerberos}
-\begin{minipage}{0.45\linewidth}
-    \begin{enumerate}
-        \item Client $\rightarrow$ TGS (Ticket Granting Server = DC): \textit{Anfrage}
-        \item TGS $\rightarrow$ Client: \textit{TGT (Ticket Granting Ticket)}
-        \item Client $\rightarrow$ Fileserver (FS): \textit{TGT}
-        \item FS $\rightarrow$ Client: \textit{schön und gut, will aber spezifisches Ticket}
-        \item Client $\rightarrow$ TGS: \textit{Anfrage spezifisches Ticket für FS}
-        \item TGS $\rightarrow$ Client: \textit{(spezifisches) Ticket für FS}
-        \item Client $\rightarrow$ FS: \textit{(spezifisches) Ticket für FS}
-        \item FS $\rightarrow$ Client: \textit{alles ok}
-    \end{enumerate}
-\end{minipage}
-\begin{minipage}{0.5\linewidth}
-    \begin{center}
-        \includegraphics[width=0.9\linewidth]{kerberos}
-        \vspace{-8pt}
-    \end{center}
-\end{minipage}
+\newpage
 
+\subsection{Kerberos}
+\begin{enumerate}
+    \item Client $\rightarrow$ TGS (Ticket Granting Server = DC): \textit{Anfrage}
+    \item TGS $\rightarrow$ Client: \textit{TGT (Ticket Granting Ticket)}
+    \item Client $\rightarrow$ Fileserver (FS): \textit{TGT}
+    \item FS $\rightarrow$ Client: \textit{schön und gut, will aber spezifisches Ticket}
+    \item Client $\rightarrow$ TGS: \textit{Anfrage spezifisches Ticket für FS}
+    \item TGS $\rightarrow$ Client: \textit{(spezifisches) Ticket für FS}
+    \item Client $\rightarrow$ FS: \textit{(spezifisches) Ticket für FS}
+    \item FS $\rightarrow$ Client: \textit{alles ok}
+\end{enumerate}
+\begin{center}
+    \includegraphics[width=0.9\linewidth]{./img/03-active_directory/kerberos}
+    \vspace{-8pt}
+\end{center}
+
+% Todo: include lab
