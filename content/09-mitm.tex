@@ -352,6 +352,8 @@ With DNS/ ARP spoofing, IPV6 Router Advertisements or Neighbour Discovery fakes.
 \subsubsection{Explain how your reverse proxy online phishing could be advertised to a victim over the internet}
 With Routing malfunctioning, Domain takeovers, unsecured public DNS. A good mitigation against these attacks is \textit{DNSSec}.
 
+\columnbreak
+
 \subparagraph{Man in the Middle - SSH}
 The Man-in-the-Middle (MitM) attack is a cyberattack where the attacker secretly relays and possibly alters the communications between two parties who believe that they are directly communicating with each other. This theory is discussing MitM for the ssh protocol.
 
@@ -521,5 +523,8 @@ Also in anderen Worten: \glqq anything goes\grqq. Dieser Server bietet nicht nur
 
 Problematisch ist übrigens auch die Zeile \lstinline|SSL: SUCCESS|. RDPs Enhanced Security gestattet es nämlich nach wie vor, auf die vorgeschaltetete Network Level Authentication (NLA) zu verzichten und die klassische Anmeldung via Windows-Login lediglich mit einem TLS-Tunnel zu versehen (der dann die selber gebastelte RDP-Encryption von Microsoft ersetzt).
 
-
-% TODO: include lab solution graphic (Man in the Middle - rdp)
+\begin{center}
+    \vspace{-8pt}
+    \includegraphics[width=1.0\linewidth]{./img/09-mitm/mitm_rdp}
+    \vspace{-8pt}
+\end{center}

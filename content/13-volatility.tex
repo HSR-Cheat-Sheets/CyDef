@@ -47,6 +47,8 @@ The \textit{Volatility Framework} is an open source, cross-platform, incident re
 \subsubsection{Creation of Memory Dumps}
 To create a memory dump, several tools, such as \textit{Belkasoft Ram Capturer, FTK Imager, DD, DC3DD, Computer Aided INvestigative Environment (CAINE), Helix}, and \textit{Linux Memory Extractor (LiME)}, can be used to acquire the memory image or memory dump, and then be investigated and analyzed by the tools within the Volatility Framework.
 
+\columnbreak
+
 \subsubsection{imageinfo/ windows.info}
 Let's figure out more information about the memory dump.
 
@@ -82,6 +84,7 @@ Let's figure out running processes
 
 Looking at the above listing, nothing appears out of the ordinary. Although process alg.exe is present and can sometimes be used to indicate the presence of malware, as a lone indicator, it is not sufficient to warrant further investigation at this point as it is typically considered a legitimate Windows XP process. Perhaps the next plugin, psscan, will reveal more information.
 
+\columnbreak
 
 \subsubsection{pstree}
 \textit{pstree} can be used to show the processes as a tree.
@@ -171,6 +174,7 @@ The first network-based Volatility plugin that should be used is \textit{connsca
 
 Based on this information, PID 1956 (explorer.exe) has established a connection with remote system 172.16.98.1 using port 6666. This port is a well-known malware based port. The original IP address was 207.158.22.134 and was found communicating on port 443.
 
+\columnbreak
 
 \subsubsection{procdump}
 \textit{procdump} can be used to dump the malicious process.
@@ -196,6 +200,8 @@ There are a number of tools that can be used to pack and encrypt executable file
     \item \textbf{UPX (Ultimate Packer for Executables} — this is the most commonly used by malware developers. It is an open source and command-line tool. It also has the ability to unpack the packed files.
     \item \textbf{ASPack} — it has both a free and premium version. It was created to provide win32-exe file packing and protect it from reverse engineering.
 \end{itemize}
+
+\columnbreak
 
 \subsubsection{Identifying a packed sample}
 
