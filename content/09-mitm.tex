@@ -199,7 +199,12 @@ Es wird versucht, dass die verbindung zwischen Client und Angreifer ge-downgrade
 \end{itemize}
 
 \subsubsection{MITM SSH Attack}
-Bei MITM mit SSH wird eine Warnung dem User angezeigt, dass der host key nicht matcht!
+Bei Username/ PW Authentication:
+\begin{itemize}
+    \item beim 1. Login $\rightarrow$ nicht bemerkbar durch User
+    \item beim 2. Login $\rightarrow$ Zertifikatswarnung wird dem User angezeigt, dass der host key nicht matcht!
+\end{itemize}
+
 \begin{center}
     \vspace{-8pt}
     \includegraphics[width=.8\linewidth]{./img/09-mitm/ssh_overview}
@@ -207,14 +212,18 @@ Bei MITM mit SSH wird eine Warnung dem User angezeigt, dass der host key nicht m
 \end{center}
 
 \textbf{SSH Public Key Authentication}\\
-Verhindert MITM
+Bei Public-Key Authentication:
+\begin{itemize}
+    \item \textit{PubKeyAuth} (Empfohlen!) + enforce \textit{PubKeyAuth} bei Client
+    \item Somit ist kein Downgrade seitens des Clients  mehr möglich (Downgrade von Public-Key auf Username/ PW)
+    \item Verhindert somit MitM
+\end{itemize}
+
 \begin{center}
     \vspace{-8pt}
     \includegraphics[width=.8\linewidth]{./img/09-mitm/pk_auth}
     \vspace{-8pt}
 \end{center}
-
-\columnbreak
 
 \textbf{SSH Google 2FA}\\
 Verhindert kein MITM!
@@ -249,7 +258,7 @@ Ist auch möglich mit public key authentication
     \vspace{-8pt}
 \end{center}
 \textbf{CredSSP mit NTLM Auth}\\
-$\rightarrow$ Siehe: \ref{subsubsec:cred-ssp}
+$\rightarrow$ Siehe: \nameref{subsubsec:cred-ssp}
 
 \textbf{Fazit Machbarkeitsanalyse}
 \begin{itemize}

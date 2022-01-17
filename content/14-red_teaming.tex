@@ -269,8 +269,6 @@ $\rightarrow$ Python Script für pass the hash attacken: \lstinline|psexec.py|\\
 \subsubsection{CrackMapExec}
 Mit dem NTLM-Hash des Helpdesk-Benutzers können wir nun mit einem Tool namens CrackMapExec leicht überprüfen, ob dasselbe lokale Benutzerkonto (mit demselben Passwort) auf anderen Systemen existiert.
 
-
-
 \subsection{Step 6: Situational Awareness on FS1}
 Wir haben nun Zugriff auf den Host FS1.winattacklab.local mit administrativen Rechten erhalten. Das bedeutet, dass wir nicht mehr nach lokalen Methoden zur Privilegienerweiterung suchen müssen. Stattdessen ist das Ziel, andere wertvolle Informationen zu finden, die uns helfen könnten, andere Benutzer oder Hosts zu kompromittieren.
 
@@ -280,7 +278,7 @@ Wir haben nun Zugriff auf den Host FS1.winattacklab.local mit administrativen Re
 Dieses Skript zielt darauf ab, häufige Windows-Konfigurationsprobleme aufzuzählen, die zur lokalen Privilegienerweiterung ausgenutzt werden können. Außerdem sammelt es verschiedene Informationen, die für eine Ausnutzung und/oder Nachnutzung nützlich sein könnten.
 Dieses Tool soll Sicherheitsberatern dabei helfen, potenzielle Schwachstellen auf Windows-Rechnern während Penetrationstests und Workstation/VDI-Audits zu identifizieren. Es ist nicht für den Einsatz bei Red-Team-Einsätzen gedacht, kann aber dennoch viele nützliche Informationen liefern.
 
-\subparagraph{Lines of Interest in output}\mbox{} \\
+\paragraph{Lines of Interest in output}\mbox{} \\
 
 \begin{lstlisting}[language=bash]
     | KO | Med. | CREDS > Unattend Files -> 1 result(s)       |
@@ -311,7 +309,7 @@ Dies zeigt an, dass eine Datei für die unbeaufsichtigte Installation gefunden w
 
 PrivescCheck die Datei direkt geparst und das Passwort \textcolor{red}{\textit{Winter2019}} für den Benutzer \textcolor{red}{\textit{admin}} gefunden.
 
-\subparagraph{unattend.xml}\mbox{} \\
+\paragraph{unattend.xml}\mbox{} \\
 Antwortdateien (oder Unattend-Dateien) können verwendet werden, um Windows-Einstellungen in Ihren Images während der Einrichtung zu ändern. Sie können auch Einstellungen erstellen, die Skripte in Ihren Images auslösen, die ausgeführt werden, nachdem der erste Benutzer sein Konto erstellt und seine Standardsprache ausgewählt hat.
 
 

@@ -20,18 +20,18 @@ YARA (Yet Another Recursive/ Ridiculous Acronym) ist ein Tool, das Malware-Forsc
         \item Standard: YARA rules
     \end{itemize}    
 \end{itemize}
-\includegraphics[width=\linewidth]{./img/13-yara/yara_rule.png}
-\includegraphics[width=\linewidth]{./img/13-yara/yara_rule_explained.png}
-\includegraphics[width=\linewidth]{./img/13-yara/yara_rule2.png}
-\includegraphics[width=\linewidth]{./img/13-yara/yara_rule_explained2.png}
-\includegraphics[width=\linewidth]{./img/13-yara/yara_rule3.png}
-\includegraphics[width=\linewidth]{./img/13-yara/yara_rule_explained3.png}
+\includegraphics[width=\linewidth]{./img/12-yara/yara_rule.png}
+\includegraphics[width=\linewidth]{./img/12-yara/yara_rule_explained.png}
+\includegraphics[width=\linewidth]{./img/12-yara/yara_rule2.png}
+\includegraphics[width=\linewidth]{./img/12-yara/yara_rule_explained2.png}
+\includegraphics[width=\linewidth]{./img/12-yara/yara_rule3.png}
+\includegraphics[width=\linewidth]{./img/12-yara/yara_rule_explained3.png}
 Wenn mit yara gesucht wird, \textbf{matcht eine "private rule" NIE!}
 \begin{itemize}
     \item sondern immer nur die globale rule (in diesem Bsp ''bar'')
     \item in der globale rule ''bar'' kann als condition aber die private rule (WindowsPE) hinterlegt werden!\\
 \end{itemize}
-\includegraphics[width=\linewidth]{./img/13-yara/yara_string.png}
+\includegraphics[width=\linewidth]{./img/12-yara/yara_string.png}
 
 \subsection{Packer}
 \begin{itemize}
@@ -40,7 +40,7 @@ Wenn mit yara gesucht wird, \textbf{matcht eine "private rule" NIE!}
     \item They can range from simple compression to full on encryption / debugger detection and generally make the life of the Malware Reverser a pain.
     \item Packers are not fool proof – the exe HAS to be decrypted / decompressed at SOME point in order to run on the OS.
 \end{itemize}
-\includegraphics[width=\linewidth]{./img/13-yara/yara_cli.png}
+\includegraphics[width=\linewidth]{./img/12-yara/yara_cli.png}
 
 \subparagraph{Yara \& Volatility}
 \subsection{Yara and yarGen}
