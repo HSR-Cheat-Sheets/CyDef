@@ -175,7 +175,6 @@ Es wird versucht, dass der Client direkt seine Credentials dem Attacker liefert,
 
 \textbf{Online Phishing}\\
 Es wird versucht, dass die verbindung zwischen Client und Angreifer ge-downgraded wird (https $\rightarrow$ http).
-% TODO: wieso kann die https verbindung nicht bestehen bleiben und der angreifer das zertifikat "weiterleiten"?
 \begin{center}
     \vspace{-8pt}
     \includegraphics[width=.8\linewidth]{./img/09-mitm/http2https}
@@ -193,7 +192,7 @@ Es wird versucht, dass die verbindung zwischen Client und Angreifer ge-downgrade
     \item Monitoring similar domain registrations as the own domain (dnstwists)
     \item Being able to block certain websites or domains in case of emergency
     \item Certificate Pinning $\rightarrow$ Mobile Apps
-    \item HPKP (HTTP Public Key Pinning) $\rightarrow$ Deaktiviert seit Jan 2021 %TODO ist das was anders? -> siehe handnotizen
+    \item HPKP (HTTP Public Key Pinning) $\rightarrow$ Deaktiviert seit Jan 2021
     \item Neu Expect-CT (Expect Certificate Transparency)\\
     $\rightarrow$ Tells the browser to check the Certificate Transparency (CT) logs to make sure the presented certificate is properly logged.
 \end{itemize}

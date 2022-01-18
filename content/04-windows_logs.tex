@@ -185,3 +185,22 @@ Yes, the \textit{Wazuh agent} is forwarding both types of log files. The agent c
 \subsubsection{Wazuh Filters}
 \textit{Wazuh Filters} can be used to filter the collected (already existing) logs from Elasticsearch to show only the needed and relevant logs. Since Elasticsearch indexes a lot of data, it quickly becomes confusing without filters.
 In contrast, \textit{Wazuh Rules} can be applied to new (incoming) logs and generate an alarm, for example.
+
+
+\subsubsection{Wazuh server}
+The Wazuh server is based on a suite of applications where each application or component is designed to accomplish a certain task. These components work together to:
+\begin{itemize}
+    \item analyze data received from various logs,
+    \item trigger alerts when a log event matches a rule,
+    \item register new clients/agents, and
+    \item send data to the Elastic Stack server.
+\end{itemize}
+
+
+\textbf{Components:}
+\begin{itemize}
+    \item The Wazuh manager receives and analyzes data from the agents using decoders and rules that have been created to trigger security alerts. The manager is also used to distribute configuration files to the agents, to monitor their status and to send control messages to trigger automatic actions at the agent level.
+    \item The Registration Service uses a secure mechanism to register agents without any intervention from the server side.
+    \item The RESTful API provides an interface to manage and monitor the configuration of the manager and agents. It is used to register agents, inspect the manager log messages, decoders and rules and provide useful information related to the agents, including their status, operating system details, and alerts related to file integrity monitoring and rootchecks.
+    \item Filebeat is used to forward alerts data from Wazuh manager to Elasticsearch. This component has its own documentation developed by Elastic.
+\end{itemize}

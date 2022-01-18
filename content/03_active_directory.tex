@@ -234,4 +234,38 @@ Ping Castle ist ein Tool zur schnellen Bewertung des Sicherheitsniveaus von Acti
     \vspace{-8pt}
 \end{center}
 
-% Todo: include lab
+\subparagraph{SOC: Active Directory & Create Domain User}
+\subsubsection{Is it possible to login with the newly created user via RDP to any computer of the domain?}
+This depends on the GPOs. In this case, this works.
+
+\subsubsection{If a person leaves the company, would you delete or disable the account?}
+I would first disable the account. After a certain amount of time, the account should be deleted (automated or by hand).
+
+\subsubsection{Do you know something similar in Linux? (sharing accounts among the network)}
+Not really. But Linux can use LDAP as authentication server.
+
+\subsubsection{4. What is a DC or PDC}
+DC stands for Domain controller.
+I assume that PDC stands for Primary Domain Controller. There can be multiple domain controllers in one network (for redundancy reasons).
+
+
+\subparagraph{SOC: Active Directory & GPO - Create Folder & Files}
+\subsubsection{Explain the GPO feature. What is it?}
+A group policy object is a set of rules, that can be applied to an OU in an AD. This object can set settings on computer or user level. GPOs are stored on the SYSVOL.
+
+\subsubsection{Explain how to create a policy that will create a folder on the server where the policy gets applied}
+The policy creates a folder C:\SOC. The folder policy is set on computer level. When to computer runs the policy, the folder gets created and the file from SYSVOL will be copied into this folder.
+
+\subsubsection{Explain how to copy a file/script to the server where the policy gets applied}
+Every domain computer has access to the SYSVOL volume. The file gets copied from this volume.
+
+\subsubsection{How would you set a registry key on the server where the policy gets applied?}
+GPOs can also set registry keys and values.\\
+Computer (or User) Configuration > Preferences > Windows Settings > Registry. Select in the context menu: New > Registry Wizard
+
+\subsubsection{How would you set a proxy on the server where the policy gets applied?}
+Also via GPO. Here is a introduction on how to do this:
+https://www.gfi.com/support/products/how-to-force-proxy-settings-via-group-policy
+
+\subsubsection{Explain what you have learned}
+I am already familiar with group policies from my workplace. GPOs are a very powerful way to distribute settings for a large group of computers in an AD.
