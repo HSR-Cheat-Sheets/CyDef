@@ -5,7 +5,164 @@
 %! Project = cydef_summary
 
 \section{MISP}
-MISP Threat Sharing (MISP) is an open source threat intelligence platform. The project develops utilities and documentation for more effective threat intelligence, by sharing indicators of compromise.
+MISP Threat Sharing (MISP) is an open source threat intelligence platform. The project develops utilities and documentation for more effective threat intelligence, by sharing indicators of compromise.\\
+
+OSINT: GitHub, MalwareBazaar, URLhaus, Tweetdeck\\
+CSINT: Mail, PDF\\
+\includegraphics[width=\linewidth]{./img/15-misp/misp.png}
+\begin{itemize}
+    \item MISP software facilitates the exchange and sharing of:
+    \begin{itemize}
+        \item threat intelligence
+        \item Indicators of Compromise (IoCs)
+        \item Targeted malware and attacks
+        \item financial fraud
+        \item or any intelligence within your community of trusted members.
+    \end{itemize}
+    \item Used by malware researchers and SOC's
+    \item More than 6000 organisations worldwide are using MISP
+\end{itemize}
+
+\subsection{Events}
+\begin{itemize}
+    \item MISP events are encapsulations for contextually related information represented as attribute and object.
+    \item Used to store and share malware data / IOCs in a structured way
+    \item Foundation of MISP
+    \item Can be shared to other MISP instances
+    \item Always belongs to one organisation
+\end{itemize}
+Events include: Date, Distribution, Threat Level, Analysis, Event Info, Extends Event
+
+\subsection{Attributes}
+\begin{itemize}
+    \item Describe a MISP event
+    \item can be network indicators (e.g. IP address)
+    \item can be system indicators (e.g. a string in memory)
+    \item can be even bank account details
+    \item can be Many more ...
+\end{itemize}
+
+\subsection{Categories and Types}
+Categories:
+\begin{itemize}
+    \item Financial fraud
+    \item Network activity
+    \item Payload installation
+    \item Person
+\end{itemize}
+Types:
+\begin{itemize}
+    \item Btc (bitcoin address)
+    \item Email-body
+    \item Ip-src  
+\end{itemize}
+
+\subsection{Objects}
+Groups attributes which belong together.\\
+Person object $\rightarrow$ Attributes: Last Name, First Name, Portrait, Address, Phone Number, birth date\\
+Email object $\rightarrow$ Attributes: Screenshot, Reply-to, Subject, To, From, Msg, From-domain
+\subsection{Attachments}
+File attachments can be added to Categories
+\begin{itemize}
+    \item Antivirus detection
+    \item Payload delivery
+    \item Artifacts dropped
+    \item Payload installation
+    \item Network activity (e.g. Wireshark PCAP file)
+    \item External analysis (e.g. Report from online sandbox)
+    \item Support Tool (e.g. Support Ticket PDF)
+\end{itemize}
+Is a malware sample (encrypt and hash) $\rightarrow$ Creates file object (file, filename, md5, sha1, sha256, size)\\
+Advanced extraction $\rightarrow$ Creates additional attributes (entropy, mimetype, ssdeep, ...)
+
+\subsection{Import}
+Import can be Freetext or Template.
+
+\subsection{Graphs}
+\includegraphics[width=\linewidth]{./img/15-misp/graph}
+
+\subsection{Taxonomies}
+\begin{itemize}
+    \item Classify your events
+    \item Admin must enable them separately
+    \item A Taxonomy Library contains several tags
+    \item Tags can be set on attributes or events\\
+\end{itemize}
+\includegraphics[width=.7\linewidth]{./img/15-misp/misp_tag}\\
+\textbf{Use cases:}
+\begin{itemize}
+    \item Display all events with a specific tag
+    \item Classification for sharing
+    \item Filtering mechanisms to rename or replacetaxonomies/tags at pull and push synchronisation
+    \item Set events for further processing by external tools
+\end{itemize}
+
+\columnbreak
+
+\subsection{Galaxies}
+Galaxies in MISP are a method used to express a large object called cluster.
+Can be attached to MISP events or attributes
+A cluster can be composed of one or more elements.
+Elements are expressed as key-values.
+\subsection{Sightings}
+provide method to signal false positives\\
+\includegraphics[width=\linewidth]{./img/15-misp/sightings.png}
+\subsection{Event Report}
+Event report can be generated on an event. compiled to markdown from the already given attributes / objects or hand written.\\
+\textbf{Proposals} can be generated. Owner of event can approve or discard the proposal
+\subsection{Correlation}
+MISP automatically creates correlations. Relationship between events: Matching file hash, Matching email address, Matching IP address
+\subsection{Warning Lists}
+MISP warninglists are lists of well-known indicators that can be associated to potential false positives, errors or mistakes.
+\subsection{Notice Lists}
+Inform MISP users of Legal implications, Privacy implications, Policy implications, Technical implications.
+Currently only gdpr.
+\subsection{Sharing}
+\includegraphics[width=\linewidth]{./img/15-misp/sharing.png}
+\subsubsection{Distribution Levels}
+Events that are not published are only distributed to the local organisations on the same MISP server
+\begin{itemize}
+    \item Your organisation only
+    \item This community only
+    \item Connected communities
+    \item All communities
+    \item Sharing group
+\end{itemize}
+Only events that are published will be shared with other MISP servers via push / pull mechanisms
+\subsubsection{Feeds}
+Easily import any remote or local URL to store the data in your MISP instance at regular intervals.
+\subsubsection{Synchronisation}
+\includegraphics[width=\linewidth]{./img/15-misp/misp_synchronisation.png}
+A MISP Server you want to sync with is a \textbf{Sync Server}. API credentials of sync user are needed.
+\begin{itemize}
+    \item Push
+    \begin{itemize}
+        \item Provides a seemingly real time experience
+        \item Attempt to synchronise is made immediately after publication of an event
+        \item Disadvantage: connection issues or dead workers might prevent the push from being successful
+        \item Data with distribution set to Your organisation only or This community only will not be synchronised
+    \end{itemize}
+    \item Pull
+    \begin{itemize}
+        \item Only performed on command
+        \item Could be a manual trigger by an admin or a cron job
+        \item Will also fetch objects with a distribution set to this community only and organisation only
+       
+    \end{itemize}
+\end{itemize}
+\subsection{Sharing Groups}
+More granular way to create re-usable distribution lists for events/attributes. Can be created by User. Not recommended in practice.
+
+\subsection{API}
+MISP REST API allows for third parties to access MISP database. API AuthKey is needed. Access via REST or PyMISP.
+\subsection{Expansion Modules}
+Extend functionality beyond MISP’s core features. 
+
+\begin{itemize}
+    \item Expansion modules (BTC scam check, GeoIP, JoeSandbox Submit, ...)
+    \item Export modules (PDF Export, Cisco ACL rule, ...)
+    \item Import modules (CSV Import, Email import, OCR ...)
+\end{itemize}
 
 \subsection{Introduction}
 
@@ -66,7 +223,7 @@ PThe following script will return if the event is published, how many attributes
     print(f"Distribution Level: {event['Event']['distribution']}")
 \end{lstlisting}
 
-\newpage
+
 
 \subsection{Event Graph | MITRE ATT\&CK}
 
@@ -79,8 +236,6 @@ MISP galaxies are a method used to express a large object (called cluster) that 
 Tag are uses to tag events, objects or attributes (obviously). Tags can be set from Taxonomy or Custom tags. Example for an tag could be "tlp:white"
 
 \subsection{Sharing}
-
-\textcolor{red}{-> Marius, wichtigste Punkte für Sharing}
 
 \subsubsection{On your instance A, you defined the distribution level of this event as Community only, but on instance B the distribution level is set to Organisation - Why?}
 The distribution level can vary from instance to instance. The highest level is always at the organisation which created (and owns) the event.
@@ -102,7 +257,7 @@ They could support you during research. MISP Modules can save you a lot of repet
 \subsubsection{Why does MISP introduced a feature like Modules, when it's already open source?}
 No one is able to develop a tool that satisfies all users with all their desired features. So MISP invented Modules wich can be used like mods in games.
 
-\newpage
+
 
 \subsection{Warning Lists}
 
@@ -114,7 +269,4 @@ This value appears in two lists. It is in the URL Shorteners domain and Office 3
 
 \subsubsection{Try to add a second attribute to the event and add a value also in one of the enabled warninglists. Does it also show up as a warning?}
 As long as the value added is in the correct category and type (and in the warninglist) the attribute warning shows up like this.
-
-\subsection{Cluster vs. Galaxies}
-\textcolor{red}{-> Marius}
 
